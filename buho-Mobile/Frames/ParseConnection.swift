@@ -151,13 +151,46 @@ class ParseConnection {
         }
     }
     
-    
+    ///obtiene todos los compromisos del contrato.
+    func getActivitiesForContract(contract: Contract, completionHandler: (succeded: Bool, error: NSError?, data: NSDictionary?) -> ()){
+        
+        var data: [String: [MeetingItem] ] = [:]
+        var arrayActivities: [MeetingItem] = []
+        
+        let estado = arrayCodes.getCodeByName("En Ejecución")
+        let tipo = arrayCodes.getCodeByName("Compromisos")
+        
+        let query = MeetingItem.query()!
+        query.whereKey("ContractId", equalTo: contract)
+        query.whereKey("State", equalTo: estado!)
+        query.whereKey("Type", equalTo: tipo!)
+        query.findObjectsInBackgroundWithBlock { (objects: [PFObject]?, error: NSError?) -> Void in
+            guard error == nil else {
+                completionHandler(succeded: false, error: error, data: nil)
+                return
+            }
+            if let activities = objects as? [MeetingItem]{
+                arrayActivities = activities
+                
+                arrayActivities.sortInPlace({
+                     $0.DueDate.compare($1.DueDate) == NSComparisonResult.OrderedDescending
+                })
+                
+                data["Activities"] = arrayActivities
+                completionHandler(succeded: true, error: nil, data: data)
+            }else{
+                completionHandler(succeded: false, error: nil, data: nil)
+            }
+        }
+        
+        
+    }
     
     
     ///Obtiene los códigos generales, tales como
     func loadCodes(){
         
-        let query = Code.query()!
+        let query = PFQuery(className: "Code")
         query.includeKey("CodeType")
         query.findObjectsInBackgroundWithBlock {
             (codeObjects:[PFObject]?, error: NSError?) -> Void in
@@ -477,13 +510,17 @@ enum typeOfArray : String {
 }
 
 enum MeetingItemType : String {
-    case Compromisos = "Compromisos", Acuerdos = "Acuerdos", Info = "Info"
+    case Compromisos = "Compromisos"
+    case Acuerdos = "Acuerdos"
+    case Info = "Info"
     
     static let allValues = [Compromisos, Acuerdos, Info]
 }
 
 enum MeetingItemState : String {
-    case Ejecucion = "En Ejecución", Cancelado = "Cancelado", Terminado = "Terminado"
+    case Ejecucion = "En Ejecución"
+    case Cancelado = "Cancelado"
+    case Terminado = "Terminado"
     
     static let allValues = [Ejecucion, Cancelado, Terminado]
 }

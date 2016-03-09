@@ -14,6 +14,9 @@
 		9369F5371C8756F300EFC88D /* buho_Mobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9369F5351C8756F300EFC88D /* buho_Mobile.xcdatamodeld */; };
 		9369F5391C8756F300EFC88D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9369F5381C8756F300EFC88D /* Assets.xcassets */; };
 		9369F53C1C8756F300EFC88D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9369F53A1C8756F300EFC88D /* LaunchScreen.storyboard */; };
+		939956081C90A8D3007AAB41 /* MeetingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939956071C90A8D3007AAB41 /* MeetingItem.swift */; };
+		9399560A1C90A91F007AAB41 /* Responsibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939956091C90A91F007AAB41 /* Responsibility.swift */; };
+		9399560C1C90AA96007AAB41 /* Extensiones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9399560B1C90AA96007AAB41 /* Extensiones.swift */; };
 		93C7FEAD1C8D222800926DB3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C7FEAC1C8D222800926DB3 /* LoginViewController.swift */; };
 		93C7FEB11C8D4B6500926DB3 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C7FEB01C8D4B6500926DB3 /* CustomButton.swift */; };
 		93DABB0E1C8DF64900164B1F /* CommonHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93DABB0D1C8DF64900164B1F /* CommonHelpers.swift */; };
@@ -51,6 +54,9 @@
 		9369F5381C8756F300EFC88D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9369F53B1C8756F300EFC88D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9369F53D1C8756F300EFC88D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		939956071C90A8D3007AAB41 /* MeetingItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeetingItem.swift; path = Models/MeetingItem.swift; sourceTree = "<group>"; };
+		939956091C90A91F007AAB41 /* Responsibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Responsibility.swift; path = Models/Responsibility.swift; sourceTree = "<group>"; };
+		9399560B1C90AA96007AAB41 /* Extensiones.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensiones.swift; sourceTree = "<group>"; };
 		93C7FEAC1C8D222800926DB3 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ViewControllers/LoginViewController.swift; sourceTree = "<group>"; };
 		93C7FEB01C8D4B6500926DB3 /* CustomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomButton.swift; path = Frames/CustomButton.swift; sourceTree = "<group>"; };
 		93DABB0D1C8DF64900164B1F /* CommonHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommonHelpers.swift; path = Frames/CommonHelpers.swift; sourceTree = "<group>"; };
@@ -157,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				93C7FEB01C8D4B6500926DB3 /* CustomButton.swift */,
+				9399560B1C90AA96007AAB41 /* Extensiones.swift */,
 				93DABB0D1C8DF64900164B1F /* CommonHelpers.swift */,
 				93DABB0F1C8DF6C200164B1F /* NetworkConnection.swift */,
 				93DABB111C8DF70100164B1F /* ParseConnection.swift */,
@@ -193,6 +200,8 @@
 				93DABB331C8DF9D300164B1F /* Company.swift */,
 				93DABB351C8DFA1600164B1F /* TypeCode.swift */,
 				93DABB371C8DFA5B00164B1F /* Resource.swift */,
+				939956071C90A8D3007AAB41 /* MeetingItem.swift */,
+				939956091C90A91F007AAB41 /* Responsibility.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -273,12 +282,15 @@
 				9369F5371C8756F300EFC88D /* buho_Mobile.xcdatamodeld in Sources */,
 				93C7FEB11C8D4B6500926DB3 /* CustomButton.swift in Sources */,
 				93DABB121C8DF70100164B1F /* ParseConnection.swift in Sources */,
+				9399560A1C90A91F007AAB41 /* Responsibility.swift in Sources */,
 				93DABB101C8DF6C200164B1F /* NetworkConnection.swift in Sources */,
 				93DABB321C8DF99E00164B1F /* Code.swift in Sources */,
 				931862731C9098890075780D /* DetailViewController.swift in Sources */,
 				93DABB2E1C8DF94E00164B1F /* Contact.swift in Sources */,
 				931862761C90995E0075780D /* ActivityViewCell.swift in Sources */,
+				939956081C90A8D3007AAB41 /* MeetingItem.swift in Sources */,
 				93C7FEAD1C8D222800926DB3 /* LoginViewController.swift in Sources */,
+				9399560C1C90AA96007AAB41 /* Extensiones.swift in Sources */,
 				93DABB341C8DF9D300164B1F /* Company.swift in Sources */,
 				93DABB301C8DF97B00164B1F /* Contract.swift in Sources */,
 				93DABB0E1C8DF64900164B1F /* CommonHelpers.swift in Sources */,

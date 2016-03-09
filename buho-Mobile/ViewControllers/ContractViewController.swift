@@ -116,7 +116,7 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
             
             let titleSection = self.arrayCompanies[indexPath.section]
             let sectionContracts = self.dictionaryContracts[titleSection]!
-//            performSegueWithIdentifier("showDetail", sender: sectionContracts[indexPath.row])
+            performSegueWithIdentifier("showDetail", sender: sectionContracts[indexPath.row])
         }
         
     }
@@ -158,12 +158,12 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
                 self.activityIndicator.stopAnimating()
                 self.tableView.reloadData()
                 
-//                //para seleccionar la primera fila por default
-//                if !self.arrayContracts.isEmpty {
-//                    let rowToSelect:NSIndexPath = NSIndexPath(forRow: 0, inSection: 0);  //selecting 0th row with 0th section
-//                    self.tableView.selectRowAtIndexPath(rowToSelect, animated: true, scrollPosition: UITableViewScrollPosition.None);
-//                    self.tableView(self.tableView, didSelectRowAtIndexPath: rowToSelect);
-//                }
+                //para seleccionar la primera fila por default
+                if !self.arrayContracts.isEmpty {
+                    let rowToSelect:NSIndexPath = NSIndexPath(forRow: 0, inSection: 0);  //selecting 0th row with 0th section
+                    self.tableView.selectRowAtIndexPath(rowToSelect, animated: true, scrollPosition: UITableViewScrollPosition.None);
+                    self.tableView(self.tableView, didSelectRowAtIndexPath: rowToSelect);
+                }
             }
         }
     }

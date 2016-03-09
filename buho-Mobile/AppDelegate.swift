@@ -18,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var parseConnection : ParseConnection = ParseConnection.sharedInstance
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        
         // Override point for customization after application launch.
         
 //        //Colores
@@ -29,6 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         self.configurarParse()
+        parseConnection.loadCodes()
         return true
     }
 
@@ -163,9 +166,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Company.registerSubclass()
         Contract.registerSubclass()
 //        Meeting.registerSubclass()
-//        Responsibility.registerSubclass()
+        Responsibility.registerSubclass()
 //        MeetingItemLog.registerSubclass()
-//        MeetingItem.registerSubclass()
+        MeetingItem.registerSubclass()
 //        Participant.registerSubclass()
         Resource.registerSubclass()
         
