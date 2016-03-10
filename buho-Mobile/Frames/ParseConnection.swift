@@ -155,12 +155,15 @@ class ParseConnection {
     func getActivitiesForContract(contract: Contract, completionHandler: (succeded: Bool, error: NSError?, data: NSDictionary?) -> ()){
         
         var data: [String: [MeetingItem] ] = [:]
+        var dictionary: [String: [MeetingItem] ] = [:]
         var arrayActivities: [MeetingItem] = []
+//        var arraySections: [String] = []
         
         let estado = arrayCodes.getCodeByName("En Ejecución")
         let tipo = arrayCodes.getCodeByName("Compromisos")
         
         let query = MeetingItem.query()!
+        query.includeKey("Responsibilities")
         query.whereKey("ContractId", equalTo: contract)
         query.whereKey("State", equalTo: estado!)
         query.whereKey("Type", equalTo: tipo!)
@@ -176,7 +179,30 @@ class ParseConnection {
                      $0.DueDate.compare($1.DueDate) == NSComparisonResult.OrderedDescending
                 })
                 
-                data["Activities"] = arrayActivities
+                for activity in arrayActivities {
+                    if dictionary[activity.DueDate.ToDateMediumString() as! String] == nil {
+                        dictionary[activity.DueDate.ToDateMediumString() as! String] = []
+                    }
+                    dictionary[activity.DueDate.ToDateMediumString() as! String]!.append(activity)
+                    
+                }
+                
+                for dateTitle in dictionary.keys {
+                    var compromisos = dictionary[dateTitle]!
+                    
+                    
+                    //ordena los contratos por nombre.
+                    compromisos.sortInPlace({
+                        (m1: MeetingItem, m2: MeetingItem) -> Bool in
+                        m1.DueDate.compare(m2.DueDate) == NSComparisonResult.OrderedDescending
+                    })
+                    
+                    dictionary[dateTitle] = compromisos
+                }
+                
+                data["activities"] = arrayActivities
+                
+                
                 completionHandler(succeded: true, error: nil, data: data)
             }else{
                 completionHandler(succeded: false, error: nil, data: nil)

@@ -13,6 +13,7 @@ protocol DateMeetingVCDelegate {
 }
 
 private let kCellActivity = "cellActivity"
+private let segueActivity = "detailActivity"
 
 class DetailViewController: UITableViewController {
     
@@ -24,10 +25,15 @@ class DetailViewController: UITableViewController {
     private var pConnection: ParseConnection = ParseConnection.sharedInstance
     
     var delegate : DateMeetingVCDelegate?
-    var sectionTitleArray : [String] = []
-    var arrayForBool : [Bool]! //NSMutableArray = NSMutableArray()
-    var arrayMeetingItems: [MeetingItem] = []
     
+    private var sectionTitleArray : [String] = []
+    private var arrayExpandSections : [Bool]!
+    
+    var arrayMeetingItems: [MeetingItem] = []
+    var arraySelfActivities: [MeetingItem] = []
+    var dictionaryActivities: [String: [MeetingItem] ] = [:]
+    var dictionarySelfActivities: [String: [MeetingItem] ] = [:]
+    var isSelf: Bool = true
     
     var start = NSDate()
     var end = NSDate()
@@ -46,21 +52,8 @@ class DetailViewController: UITableViewController {
         activityIndicator.hidesWhenStopped = true
 //        self.preferredContentSize = CGSizeMake(400,380)
         
-        arrayForBool = [Bool](count: 2, repeatedValue: false)
-        
         if let contract = detailContract {
-            activityIndicator.startAnimating()
-            pConnection.getActivitiesForContract(contract, completionHandler: { (succeded, error, data) -> () in
-                guard error == nil else {
-                    self.activityIndicator.stopAnimating()
-                    return
-                }
-                if succeded {
-                    self.activityIndicator.stopAnimating()
-                    self.arrayMeetingItems = data!["Activities"] as! [MeetingItem]
-                    self.tableView.reloadData()
-                }
-            })
+            loadActivities(contract)
         }
         
         
@@ -73,17 +66,39 @@ class DetailViewController: UITableViewController {
     
     // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-//        return sectionTitleArray.count
-        return 1
+        if isSelf{
+            return dictionarySelfActivities.count
+        }else{
+            return dictionaryActivities.count
+        }
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if arrayExpandSections[section].boolValue {
+            if isSelf {
+                let sectionTitles = [String](dictionarySelfActivities.keys)
+                let title = sectionTitles[section]
+                let count = dictionarySelfActivities[title]!.count
+                return count
+            }else{
+                let sectionTitles = [String](dictionaryActivities.keys)
+                let title = sectionTitles[section]
+                let count = dictionaryActivities[title]!.count
+                return count
+            }
+        }else{
+            return 0
+        }
 //        if arrayForBool[section].boolValue == true {
 //            return 1
 //        }
 //        return 0;
         
-        return arrayMeetingItems.count
+//        return arraySelfActivities.count//arrayMeetingItems.count
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        performSegueWithIdentifier(segueActivity, sender: nil)
     }
 //    
 //    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -163,12 +178,44 @@ class DetailViewController: UITableViewController {
 //        
 //    }
     
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if isSelf {
+            let titles = [String](dictionarySelfActivities.keys)
+            return titles[section]
+        }else{
+            let titles = [String](dictionaryActivities.keys)
+            return titles[section]
+        }
+    }
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         
         
         let cell = self.tableView.dequeueReusableCellWithIdentifier(kCellActivity)!// as! ActivityViewCell
         
-        cell.textLabel!.text = arrayMeetingItems[indexPath.row].Detail
+//        let array = arraySections[isSelf]!
+//        let sectionTitle = array[indexPath.section]
+//        let activities = dictionaryActivities[sectionTitle]!
+        
+        if isSelf {
+            let sectionTitles = [String](dictionarySelfActivities.keys)
+            let title = sectionTitles[indexPath.section]
+            let activities = dictionarySelfActivities[title]!
+            
+            cell.textLabel!.text = activities[indexPath.row].Detail
+            return cell
+        }else{
+            let sectionTitles = [String](dictionaryActivities.keys)
+            let title = sectionTitles[indexPath.section]
+            let activities = dictionaryActivities[title]!
+            
+            cell.textLabel!.text = activities[indexPath.row].Detail
+            return cell
+        }
+        
+//        cell.textLabel!.text = activities[indexPath.row].Detail //arraySelfActivities[indexPath.row].Detail//arrayMeetingItems[indexPath.row].Detail
+        
+        
 //        if indexPath.section == 0 {
 //            cell.datePicker.date = start
 //        }else{
@@ -179,7 +226,7 @@ class DetailViewController: UITableViewController {
 //        cell.datePicker.tag = indexPath.section
 //        cell.datePicker.addTarget(self, action: "changeDate:", forControlEvents: UIControlEvents.ValueChanged)
         
-        return cell
+//        return cell
         
     }
     
@@ -282,5 +329,108 @@ class DetailViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func loadActivities(contract: Contract){
+        activityIndicator.startAnimating()
+        pConnection.getActivitiesForContract(contract, completionHandler: { (succeded, error, data) -> () in
+            guard error == nil else {
+                self.activityIndicator.stopAnimating()
+                return
+            }
+            if succeded {
+                self.arrayMeetingItems = data!["activities"] as! [MeetingItem]
+                
+//                self.dictionaryActivities = data! as! [String : [MeetingItem]]
+                self.loadSelfActivities()
+//                self.tableView.reloadData()
+            }
+        })
+    }
 
+    func loadSelfActivities(){
+        
+        var dicActivities: [String: [MeetingItem] ] = [:]
+        var dicSelfActivities: [String: [MeetingItem] ] = [:]
+        
+        var i: Int
+        var j: Int
+        for i = 0; i < arrayMeetingItems.count; i += 1 {
+            let meetingItem = arrayMeetingItems[i]
+            for j = 0; j < meetingItem.Responsibilities.count; j += 1{
+                let responsibility = meetingItem.Responsibilities[j]
+                if let contact = detailContact {
+                    if responsibility.ContactId == contact{
+                        if !arraySelfActivities.contains(meetingItem) {
+                            arraySelfActivities.append(meetingItem)
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+        arrayMeetingItems.sortInPlace({
+            $0.DueDate.compare($1.DueDate) == NSComparisonResult.OrderedDescending
+        })
+        
+        arraySelfActivities.sortInPlace({
+            $0.DueDate.compare($1.DueDate) == NSComparisonResult.OrderedDescending
+        })
+        
+        for activity in arrayMeetingItems {
+            if dicActivities[activity.DueDate.ToDateMediumString() as! String] == nil {
+                dicActivities[activity.DueDate.ToDateMediumString() as! String] = []
+            }
+            dicActivities[activity.DueDate.ToDateMediumString() as! String]!.append(activity)
+            
+        }
+        
+        for activity in arraySelfActivities {
+            if dicSelfActivities[activity.DueDate.ToDateMediumString() as! String] == nil {
+                dicSelfActivities[activity.DueDate.ToDateMediumString() as! String] = []
+            }
+            dicSelfActivities[activity.DueDate.ToDateMediumString() as! String]!.append(activity)
+            
+        }
+        
+        for dateTitle in dicActivities.keys {
+            var compromisos = dicActivities[dateTitle]!
+            
+            
+            //ordena los contratos por nombre.
+            compromisos.sortInPlace({
+                (m1: MeetingItem, m2: MeetingItem) -> Bool in
+                m1.DueDate.compare(m2.DueDate) == NSComparisonResult.OrderedDescending
+            })
+            
+            dicActivities[dateTitle] = compromisos
+        }
+        
+        for dateTitle in dicSelfActivities.keys {
+            var compromisos = dicSelfActivities[dateTitle]!
+            
+            
+            //ordena los contratos por nombre.
+            compromisos.sortInPlace({
+                (m1: MeetingItem, m2: MeetingItem) -> Bool in
+                m1.DueDate.compare(m2.DueDate) == NSComparisonResult.OrderedDescending
+            })
+            
+            dicSelfActivities[dateTitle] = compromisos
+        }
+        
+        dictionaryActivities = dicActivities
+        dictionarySelfActivities = dicSelfActivities
+        
+        
+        arrayExpandSections = [Bool](count: dictionarySelfActivities.count, repeatedValue: true)
+        
+//        arraySelfActivities.sortInPlace { (m1: MeetingItem, m2: MeetingItem) -> Bool in
+//            m1.DueDate.compare(m2.DueDate) == NSComparisonResult.OrderedDescending
+//        }
+        
+//        dump(arraySelfActivities)
+        activityIndicator.stopAnimating()
+        tableView.reloadData()
+    }
 }

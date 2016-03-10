@@ -110,7 +110,7 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         contract = Contract()
         if resultSearchController.active {
-//            performSegueWithIdentifier("showDetail", sender: arrayFilteredContracts[indexPath.row])
+            performSegueWithIdentifier("showDetail", sender: arrayFilteredContracts[indexPath.row])
             resultSearchController.searchBar.clearsContextBeforeDrawing = true
         }else{
             
@@ -121,6 +121,48 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
         
     }
     
+//    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//
+//        let headerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 50))
+//        headerView.tag = section
+//        headerView.backgroundColor = UIColor.grayColor()
+//
+//        let headerString = UILabel(frame: CGRect(x: 10, y: 10, width: tableView.frame.size.width - (tableView.frame.size.width/2), height: 30)) as UILabel
+//        let text = arrayCompanies[section]
+//        headerString.text = text
+//        headerString
+//        headerView.addSubview(headerString)
+//        
+////        if self.isEarlyEnd {
+////            if section == 1 {
+////                let text = sectionTitleArray[section]
+////                let attributeString: NSMutableAttributedString = NSMutableAttributedString(string: text)
+////                attributeString.addAttribute(NSStrikethroughStyleAttributeName, value: 2, range: NSMakeRange(0, attributeString.length))
+////                headerString.attributedText = attributeString
+////                headerView.addSubview(headerString)
+////            }else{
+////                headerString.text = sectionTitleArray[section]
+////                headerView.addSubview(headerString)
+////            }
+////        }else {
+////            headerString.text = sectionTitleArray[section]
+////            headerView.addSubview(headerString)
+////        }
+//
+////        let headerTapped = UITapGestureRecognizer (target: self, action:"sectionHeaderTapped:")
+////        headerView.addGestureRecognizer(headerTapped)
+//        
+//        return headerView
+//    }
+    
+//    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 50
+//    }
+//
+//    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return 1
+//    }
+
     //MARK: - Funciones
     @IBAction func logoutButtonAction(sender: UIBarButtonItem) {
         

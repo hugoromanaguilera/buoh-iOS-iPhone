@@ -134,11 +134,11 @@
 		9369F52D1C8756F300EFC88D /* buho-Mobile */ = {
 			isa = PBXGroup;
 			children = (
-				93DABB2C1C8DF92A00164B1F /* Models */,
 				93DABB131C8DF7F000164B1F /* Frameworks */,
-				9369F52E1C8756F300EFC88D /* AppDelegate.swift */,
 				93C7FEAF1C8D4B3C00926DB3 /* Frames */,
+				93DABB2C1C8DF92A00164B1F /* Models */,
 				93C7FEAE1C8D49AB00926DB3 /* ViewControllers */,
+				9369F52E1C8756F300EFC88D /* AppDelegate.swift */,
 				9369F5321C8756F300EFC88D /* Main.storyboard */,
 				9369F53A1C8756F300EFC88D /* LaunchScreen.storyboard */,
 				9369F53D1C8756F300EFC88D /* Info.plist */,
