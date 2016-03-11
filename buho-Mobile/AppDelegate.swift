@@ -11,7 +11,7 @@ import CoreData
 import Parse
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
 
     var window: UIWindow?
     var networkConnection : NetworkConnection = NetworkConnection.sharedInstance
@@ -19,8 +19,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
+        self.configurarParse()
         
         // Override point for customization after application launch.
+//        let splitViewController = self.window!.rootViewController as! UISplitViewController
+//        let navigationController = splitViewController.viewControllers[splitViewController.viewControllers.count-1] as! UINavigationController
+//        navigationController.topViewController!.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem()
+//        splitViewController.delegate = self
+//        
+//        let masterNavigationController = splitViewController.viewControllers[0] as! UINavigationController
+//        let controller = masterNavigationController.topViewController as! ContractViewController
+//        controller.managedObjectContext = self.managedObjectContext
         
 //        //Colores
         let navigationBarAppearance = UINavigationBar.appearance()
@@ -30,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        self.window?.tintColor = UIColor(red: 239/255/*0xEF*/, green: 254/255/*0xFE*/, blue: 246/255/*0xF6*/, alpha: 1)
         
         
-        self.configurarParse()
+        
         parseConnection.loadCodes()
         return true
     }
@@ -58,6 +67,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
     }
+    
+//    // MARK: - Split view
+//    
+//    func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController:UIViewController, ontoPrimaryViewController primaryViewController:UIViewController) -> Bool {
+//        guard let secondaryAsNavController = secondaryViewController as? UINavigationController else { return false }
+//        guard let topAsDetailController = secondaryAsNavController.topViewController as? ActivityViewController else { return false }
+//        if topAsDetailController.detailContact == nil {
+//            // Return true to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
+//            return true
+//        }
+//        return false
+//    }
+    
+    
 
     // MARK: - Core Data stack
 

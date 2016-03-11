@@ -165,10 +165,7 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
 
     //MARK: - Funciones
     @IBAction func logoutButtonAction(sender: UIBarButtonItem) {
-        
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewControllerWithIdentifier("LoginViewController") as UIViewController
-        self.presentViewController(vc, animated: true, completion: nil)
+        CommonHelpers.logout(self)
     }
     
     func loadContracts(contact : Contact){
@@ -237,7 +234,8 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showDetail" {
             
-            let detailVC = segue.destinationViewController as! DetailViewController
+            let navVC = segue.destinationViewController as! UINavigationController
+            let detailVC = navVC.viewControllers.first as! ActivityViewController
             detailVC.detailContract = sender as? Contract
             detailVC.detailContact = self.contact!
         }

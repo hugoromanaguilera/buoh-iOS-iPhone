@@ -131,5 +131,13 @@ class CommonHelpers: NSObject {
         return headerView
     }
     
+    class func logout(fromView: UIViewController){
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let loginVC = sb.instantiateViewControllerWithIdentifier("LoginViewController")
+        PersistedSettings.sharedInstance.usuario = ""
+        PersistedSettings.sharedInstance.password = ""
+        fromView.presentViewController(loginVC, animated: true, completion: nil)
+    }
+    
     
 }

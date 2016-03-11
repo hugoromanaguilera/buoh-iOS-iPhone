@@ -31,6 +31,8 @@ class LoginViewController: UIViewController{
         if let usr = self.persistedSettings.usuario where usr != "", let pwd = self.persistedSettings.password where pwd != ""{
             userTextField.text = usr
             passTextField.text = pwd
+            LoginAction(self)
+            
         }
         
         activityIndicator.hidesWhenStopped = true
@@ -44,8 +46,9 @@ class LoginViewController: UIViewController{
         deregisterFromKeyboardNotifications()
     }
     
+
     //MARK: - funciones
-    @IBAction func LoginAction(sender: UIButton) {
+    @IBAction func LoginAction(sender: AnyObject) {
         let userEmailAddress = userTextField.text?.lowercaseString
         let userPassword = passTextField.text
         
@@ -135,7 +138,8 @@ extension LoginViewController: UITextFieldDelegate {
             passTextField.becomeFirstResponder()
         }else{
             textField.resignFirstResponder()
-            performSegueWithIdentifier("signInToSplitView", sender: self)
+            LoginAction(self)
+//            performSegueWithIdentifier("signInToSplitView", sender: self)
         }
         
         return true
@@ -172,5 +176,7 @@ extension LoginViewController: UITextFieldDelegate {
     func keyboardWillBeHidden(notification: NSNotification){
         myScroll.setContentOffset(CGPointZero, animated: true)
     }
+    
+    
 }
 

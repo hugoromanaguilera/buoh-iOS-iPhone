@@ -1,5 +1,5 @@
 //
-//  DetailViewController.swift
+//  ActivityViewController.swift
 //  buho-Mobile
 //
 //  Created by Rodrigo Astorga on 3/9/16.
@@ -13,11 +13,12 @@ protocol DateMeetingVCDelegate {
 }
 
 private let kCellActivity = "cellActivity"
-private let segueActivity = "detailActivity"
+private let segueToDetail = "detailActivity"
 
-class DetailViewController: UITableViewController {
+class ActivityViewController: UITableViewController {
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var filterButton: UIBarButtonItem!
     
     internal var detailContact: Contact?
     internal var detailContract: Contract?
@@ -33,7 +34,7 @@ class DetailViewController: UITableViewController {
     var arraySelfActivities: [MeetingItem] = []
     var dictionaryActivities: [String: [MeetingItem] ] = [:]
     var dictionarySelfActivities: [String: [MeetingItem] ] = [:]
-    var isSelf: Bool = true
+    var isSelf: Bool = false
     
     var start = NSDate()
     var end = NSDate()
@@ -50,9 +51,14 @@ class DetailViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.hidesWhenStopped = true
+//        let filterImage = UIImage(named: "filter-outline")!
+//        let filterButton = UIBarButtonItem(image: filterImage, style: .Plain, target: self, action: "actionFilter")
+//        navigationController?.navigationItem.rightBarButtonItem = filterButton
 //        self.preferredContentSize = CGSizeMake(400,380)
         
         if let contract = detailContract {
+            navigationItem.title = contract.Name
+//            navigationController?.navigationBar
             loadActivities(contract)
         }
         
@@ -61,6 +67,61 @@ class DetailViewController: UITableViewController {
 //        sectionTitleArray = [
 //            "Hora Inicio:       \(start.getDateAndHourString()!) Hrs.",
 //            "Hora Término:    \(end.getDateAndHourString()!) Hrs."]
+    }
+    
+    func actionFilter(){
+        
+    }
+    
+    @IBAction func filterAction(sender: UIBarButtonItem) {
+        let actionSheet = UIAlertController(title: nil, message: "Seleccione el tipo de filtro:", preferredStyle: .ActionSheet)
+        
+//        let view = UIView(frame: CGRect(x: 8.0, y: 8.0, width: actionSheet.view.bounds.size.width - 8.0 * 4.5, height: 120.0))
+//        view.backgroundColor = UIColor.greenColor()
+//        actionSheet.view.addSubview(view)
+        let contratoAction = UIAlertAction(title: "Contrato", style: .Default) { _ in
+            let image = UIImage(named: "filterOutline-24")
+            self.filterButton.image = image
+            
+            self.arrayExpandSections = [Bool](count: self.dictionaryActivities.count, repeatedValue: true)
+            self.isSelf = false
+            self.tableView.reloadData()
+        }
+        
+        let propiosAction = UIAlertAction(title: "Propios", style: .Default) { _ in
+            let image = UIImage(named: "filter-24")
+            self.filterButton.image = image
+            
+            self.arrayExpandSections = [Bool](count: self.dictionarySelfActivities.count, repeatedValue: true)
+            self.isSelf = true
+            self.tableView.reloadData()
+        }
+        actionSheet.addAction(contratoAction)
+        actionSheet.addAction(propiosAction)
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancelar", style: .Cancel, handler: nil))
+        presentViewController(actionSheet, animated: true, completion: nil)
+        
+        
+//        let string = "Hola mundo"
+//        let activityVC = UIActivityViewController(activityItems: [string], applicationActivities: nil)
+//        navigationController?.presentViewController(activityVC, animated: true, completion: nil)
+        
+//        let ac = UIAlertController(title: "Enter answer", message: nil, preferredStyle: .Alert)
+//        ac.addTextFieldWithConfigurationHandler(nil)
+//        
+//        let submitAction = UIAlertAction(title: "Submit", style: .Default) { [unowned self, ac] (action: UIAlertAction!) in
+//            let answer = ac.textFields![0] as! UITextField
+//            // do something interesting with "answer" here
+//        }
+//        
+//        ac.addAction(submitAction)
+//        
+//        presentViewController(ac, animated: true, completion: nil)
+    }
+    
+    @IBAction func logoutAction(sender: UIBarButtonItem) {
+        CommonHelpers.logout(self)
     }
     
     
@@ -98,7 +159,16 @@ class DetailViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier(segueActivity, sender: nil)
+        if isSelf {
+            let sectionTitles = [String](dictionarySelfActivities.keys)
+            let activities = dictionarySelfActivities[ sectionTitles[indexPath.section] ]!
+            performSegueWithIdentifier(segueToDetail, sender: activities[indexPath.row])
+        }else{
+            let sectionTitles = [String](dictionaryActivities.keys)
+            let activities = dictionaryActivities[ sectionTitles[indexPath.section] ]!
+            performSegueWithIdentifier(segueToDetail, sender: activities[indexPath.row])
+        }
+        
     }
 //    
 //    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -138,7 +208,7 @@ class DetailViewController: UITableViewController {
 //            headerString.text = sectionTitleArray[section]
 //            headerView.addSubview(headerString)
 //        }
-//        
+//
 //        let headerTapped = UITapGestureRecognizer (target: self, action:"sectionHeaderTapped:")
 //        headerView.addGestureRecognizer(headerTapped)
 //        
@@ -320,15 +390,17 @@ class DetailViewController: UITableViewController {
     }
     */
 
-    /*
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if let destino = segue.destinationViewController as? DetailActivityViewController {
+            if let send = sender as? MeetingItem{
+                destino.activity = send
+            }
+        }
     }
-    */
     
     func loadActivities(contract: Contract){
         activityIndicator.startAnimating()
@@ -423,7 +495,7 @@ class DetailViewController: UITableViewController {
         dictionarySelfActivities = dicSelfActivities
         
         
-        arrayExpandSections = [Bool](count: dictionarySelfActivities.count, repeatedValue: true)
+        arrayExpandSections = [Bool](count: dictionaryActivities.count, repeatedValue: true)
         
 //        arraySelfActivities.sortInPlace { (m1: MeetingItem, m2: MeetingItem) -> Bool in
 //            m1.DueDate.compare(m2.DueDate) == NSComparisonResult.OrderedDescending

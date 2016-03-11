@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
         <!--Login View Controller-->
@@ -224,10 +225,10 @@
             </objects>
             <point key="canvasLocation" x="732" y="124"/>
         </scene>
-        <!--Login View Controller-->
+        <!--LoginViewController-->
         <scene sceneID="yXe-2z-28W">
             <objects>
-                <viewController id="iDD-tN-Oou" customClass="LoginViewController" customModule="buho_Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" title="LoginViewController" id="iDD-tN-Oou" customClass="LoginViewController" customModule="buho_Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="zID-rc-k8t"/>
                         <viewControllerLayoutGuide type="bottom" id="wAu-PX-S9C"/>
@@ -315,7 +316,7 @@
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <action selector="LoginAction:" destination="iDD-tN-Oou" eventType="touchUpInside" id="XOC-Bs-7tJ"/>
+                                            <action selector="LoginAction:" destination="iDD-tN-Oou" eventType="touchUpInside" id="5Jw-If-2Sb"/>
                                         </connections>
                                     </button>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0Fa-Wg-xVG">
@@ -444,21 +445,21 @@
             </objects>
             <point key="canvasLocation" x="742.5" y="810"/>
         </scene>
-        <!--Detail View Controller-->
+        <!--Compromisos-->
         <scene sceneID="HsA-0u-al0">
             <objects>
-                <tableViewController storyboardIdentifier="DetailViewController" id="drU-2o-y9B" customClass="DetailViewController" customModule="buho_Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="DetailViewController" id="drU-2o-y9B" customClass="ActivityViewController" customModule="buho_Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="6nF-Z7-jQe">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <activityIndicatorView key="tableFooterView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="M2T-EZ-2oN">
-                            <rect key="frame" x="0.0" y="72" width="600" height="20"/>
+                            <rect key="frame" x="0.0" y="136" width="600" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </activityIndicatorView>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellActivity" id="e2p-6h-ccZ">
-                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="e2p-6h-ccZ" id="Bbf-yQ-Q0V">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -471,26 +472,41 @@
                             <outlet property="delegate" destination="drU-2o-y9B" id="npG-rm-34C"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Compromisos" id="VYJ-zB-HmC">
+                        <rightBarButtonItems>
+                            <barButtonItem image="logout-24" id="rH7-vM-bJe">
+                                <connections>
+                                    <action selector="logoutAction:" destination="drU-2o-y9B" id="Ph5-bJ-VAI"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="filterOutline-24" id="oIL-Js-YEh">
+                                <connections>
+                                    <action selector="filterAction:" destination="drU-2o-y9B" id="NNk-eF-1dj"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="M2T-EZ-2oN" id="PxH-a5-ynl"/>
+                        <outlet property="filterButton" destination="oIL-Js-YEh" id="RQM-5Y-EvR"/>
                         <segue destination="JOE-Er-hDa" kind="show" identifier="detailActivity" id="6KO-Yf-7og"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Jp-5A-Dzx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2370" y="694"/>
+            <point key="canvasLocation" x="3288" y="694"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Detalle-->
         <scene sceneID="qSf-Zy-51R">
             <objects>
-                <tableViewController id="JOE-Er-hDa" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="DetailActivityViewController" id="JOE-Er-hDa" customClass="DetailActivityViewController" customModule="buho_Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="vpr-Fo-F6n">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellDetailActivity" id="61m-hP-oqa">
-                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="61m-hP-oqa" id="lf4-z4-Sn6">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -503,10 +519,11 @@
                             <outlet property="delegate" destination="JOE-Er-hDa" id="j2q-oq-E2x"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Detalle" id="6EX-wm-FJU"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fzx-rc-BWX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3090" y="694"/>
+            <point key="canvasLocation" x="4008" y="694"/>
         </scene>
         <!--ContratosTVC-->
         <scene sceneID="L7F-d9-Qmr">
@@ -535,10 +552,16 @@
                             <outlet property="delegate" destination="5Cm-Ik-rop" id="ytm-vf-eWG"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Contratos" id="ESW-DQ-YCG"/>
+                    <navigationItem key="navigationItem" title="Contratos" id="ESW-DQ-YCG">
+                        <barButtonItem key="rightBarButtonItem" image="logout-24" id="fJe-5p-r4Q">
+                            <connections>
+                                <action selector="logoutButtonAction:" destination="5Cm-Ik-rop" id="rib-dJ-dGG"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="LU8-KI-6ES" id="Y0Y-f4-74F"/>
-                        <segue destination="drU-2o-y9B" kind="showDetail" identifier="showDetail" id="hC0-vi-LFD"/>
+                        <segue destination="SXb-BH-868" kind="showDetail" identifier="showDetail" id="hC0-vi-LFD"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dHF-2k-vuF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -573,8 +596,28 @@
             </objects>
             <point key="canvasLocation" x="1440" y="257"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="ANx-WR-O6S">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="SXb-BH-868" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="3fM-gD-pIb">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="drU-2o-y9B" kind="relationship" relationship="rootViewController" id="7dD-GR-Vof"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WKi-PF-qwi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2370" y="694"/>
+        </scene>
     </scenes>
     <resources>
         <image name="buohLogo" width="1338" height="1062"/>
+        <image name="filterOutline-24" width="24" height="24"/>
+        <image name="logout-24" width="24" height="24"/>
     </resources>
 </document>
