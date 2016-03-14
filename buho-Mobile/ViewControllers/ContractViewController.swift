@@ -121,6 +121,12 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
         
     }
     
+    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let headerView: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
+        headerView.textLabel?.textColor = UIColor(red: 142/255, green: 68/255, blue: 173/255, alpha: 1)
+    }
+
+    
 //    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 //
 //        let headerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 50))
@@ -196,13 +202,13 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
             dispatch_async(dispatch_get_main_queue()) {
                 self.activityIndicator.stopAnimating()
                 self.tableView.reloadData()
-                
-                //para seleccionar la primera fila por default
-                if !self.arrayContracts.isEmpty {
-                    let rowToSelect:NSIndexPath = NSIndexPath(forRow: 0, inSection: 0);  //selecting 0th row with 0th section
-                    self.tableView.selectRowAtIndexPath(rowToSelect, animated: true, scrollPosition: UITableViewScrollPosition.None);
-                    self.tableView(self.tableView, didSelectRowAtIndexPath: rowToSelect);
-                }
+//                
+//                //para seleccionar la primera fila por default
+//                if !self.arrayContracts.isEmpty {
+//                    let rowToSelect:NSIndexPath = NSIndexPath(forRow: 0, inSection: 0);  //selecting 0th row with 0th section
+//                    self.tableView.selectRowAtIndexPath(rowToSelect, animated: true, scrollPosition: UITableViewScrollPosition.None);
+//                    self.tableView(self.tableView, didSelectRowAtIndexPath: rowToSelect);
+//                }
             }
         }
     }

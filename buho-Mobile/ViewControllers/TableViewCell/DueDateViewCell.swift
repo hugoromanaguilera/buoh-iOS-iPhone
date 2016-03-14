@@ -1,17 +1,17 @@
 //
-//  ActivityViewCell.swift
+//  DueDateViewCell.swift
 //  buho-Mobile
 //
-//  Created by Rodrigo Astorga on 3/9/16.
+//  Created by Rodrigo Astorga on 3/14/16.
 //  Copyright © 2016 Rodrigo Astorga. All rights reserved.
 //
 
 import UIKit
 
-class ActivityViewCell: UITableViewCell {
+class DueDateViewCell: UITableViewCell {
 
-    @IBOutlet weak var viewColor: UIView!
-    @IBOutlet weak var activityLabel: UILabel!
+    @IBOutlet weak var labelDueDate: UILabel!
+    @IBOutlet weak var imageViewTime: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

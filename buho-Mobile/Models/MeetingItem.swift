@@ -35,6 +35,32 @@ class MeetingItem : PFObject, PFSubclassing {
     @NSManaged var Responsibilities : [Responsibility]
     @NSManaged var Comments : [String]
     
+    ///intenta descargar los responsibilities por si no están.
+    func fetchContacts() {
+        for resp in Responsibilities{
+            
+            if let contact = resp.ContactId {
+                if !contact.dataAvailable {
+                    do {
+                        try contact.fetchIfNeeded()
+                    } catch {
+                        print("Invalid fetch.")
+                    }
+                }
+            }
+            if let rol = resp.RolTarea {
+                if !rol.dataAvailable {
+                    do {
+                        try rol.fetchIfNeeded()
+                    } catch {
+                        print("Invalid fetch.")
+                    }
+                }
+            }
+        }
+        
+    }
+    
     
     ///retorna un String con los nombres de los responsables del respectivo meetingItem.
     func getResponsibilitiesNames() -> String {

@@ -11,12 +11,31 @@ import Parse
 
 class ParseConnection {
     
+    var tmpData: TemporalData = TemporalData.sharedInstance
+    
     //singleton:
     class var sharedInstance : ParseConnection {
         struct Static {
             static let instance : ParseConnection = ParseConnection()
         }
         return Static.instance
+    }
+    
+    ///Es para el login a partir de la tabla "_User" de Parse.
+    func loginInParse(userAndPass: [String: String], completion: (succeded: Bool, error: NSError?, user: PFUser?) -> ()){
+        
+        PFUser.logInWithUsernameInBackground(userAndPass["username"]!, password:userAndPass["password"]!) {
+            (user: PFUser?, error: NSError?) -> Void in
+            guard error == nil else{
+                completion(succeded: false, error: error, user: nil)
+                return
+            }
+            if let _ = user {
+                completion(succeded: true, error: nil, user: user)
+            }else{
+                completion(succeded: false, error: nil, user: nil)
+            }
+        }
     }
     
     //MARK: - Utilizada en LoginViewController:
@@ -155,9 +174,6 @@ class ParseConnection {
     func getActivitiesForContract(contract: Contract, completionHandler: (succeded: Bool, error: NSError?, data: NSDictionary?) -> ()){
         
         var data: [String: [MeetingItem] ] = [:]
-        var dictionary: [String: [MeetingItem] ] = [:]
-        var arrayActivities: [MeetingItem] = []
-//        var arraySections: [String] = []
         
         let estado = arrayCodes.getCodeByName("En Ejecución")
         let tipo = arrayCodes.getCodeByName("Compromisos")
@@ -172,37 +188,14 @@ class ParseConnection {
                 completionHandler(succeded: false, error: error, data: nil)
                 return
             }
-            if let activities = objects as? [MeetingItem]{
-                arrayActivities = activities
-                
-                arrayActivities.sortInPlace({
-                     $0.DueDate.compare($1.DueDate) == NSComparisonResult.OrderedDescending
+            if var activities = objects as? [MeetingItem]{
+                activities.sortInPlace({
+                    $0.DueDate.isLessThanDate($1.DueDate)
                 })
+                self.tmpData.compromisos = activities
                 
-                for activity in arrayActivities {
-                    if dictionary[activity.DueDate.ToDateMediumString() as! String] == nil {
-                        dictionary[activity.DueDate.ToDateMediumString() as! String] = []
-                    }
-                    dictionary[activity.DueDate.ToDateMediumString() as! String]!.append(activity)
-                    
-                }
-                
-                for dateTitle in dictionary.keys {
-                    var compromisos = dictionary[dateTitle]!
-                    
-                    
-                    //ordena los contratos por nombre.
-                    compromisos.sortInPlace({
-                        (m1: MeetingItem, m2: MeetingItem) -> Bool in
-                        m1.DueDate.compare(m2.DueDate) == NSComparisonResult.OrderedDescending
-                    })
-                    
-                    dictionary[dateTitle] = compromisos
-                }
-                
-                data["activities"] = arrayActivities
-                
-                
+                data["activities"] = activities
+
                 completionHandler(succeded: true, error: nil, data: data)
             }else{
                 completionHandler(succeded: false, error: nil, data: nil)
@@ -211,7 +204,6 @@ class ParseConnection {
         
         
     }
-    
     
     ///Obtiene los códigos generales, tales como
     func loadCodes(){
@@ -260,32 +252,6 @@ class ParseConnection {
         }
     }
     
-    /*
-     Obtiene las reuniones asociadas a un contrato.
-     - parameter contract: el contrato del que se desea saber sus reuniones.
-     - returns: un `callback` con un array de reuniones (en caso de que existan).
-     */
-//    func getMeetingsByContract(contract : Contract, completionHandler : (succeded: Bool, error : NSError?, data : [Meeting]) -> ()){
-//        var arrayMeetings : [Meeting] = []
-//        
-//        let query = Meeting.query()!
-//        query.includeKey("Mood")
-//        query.whereKey("ContractId", equalTo: contract)
-//        query.findObjectsInBackgroundWithBlock {
-//            (meetingObjects:[PFObject]?, error: NSError?) -> Void in
-//            guard error == nil else {
-//                completionHandler(succeded: false, error: error, data: arrayMeetings)
-//                print("en ParseConnection -> loadMeetings: \(error)")
-//                return
-//            }
-//            if let meetings = meetingObjects as? [Meeting] {
-//                arrayMeetings += meetings
-//                arrayMeetings.sortInPlace({ $0.Date.compare($1.Date) == NSComparisonResult.OrderedDescending  })
-//                completionHandler(succeded: true, error: nil, data: arrayMeetings)
-//            }
-//        }
-//    }//end loadMeetings.
-    
     /**
     Obtiene los contactos asociadas a un contrato.
     - parameter contract: el contrato del que se desea saber sus reuniones.
@@ -319,201 +285,59 @@ class ParseConnection {
                 
             }
             
-            
         }
     }
     
     
-//    func getContractsByContact(contact: Contact, completionHandler : (succeded: Bool, error: NSError?, data : NSDictionary?) -> () ){
-//        var arrayCompanies : [Company] = []
-//        var arrayContracts : [Contract] = []
-//        var dictionaryContracts : [String:[Contract]] = [:]
-//        var data : [String: AnyObject] = [:]
+    func getResponsibilitiesByActivity(activity: MeetingItem) {
+        
+        
+        let query1 = Responsibility.query()!
+        query1.includeKey("ContactId")
+        query1.includeKey("RolTarea")
+        
+        let query2 = MeetingItem.query()!
+        query2.includeKey("ContractId")
+        query2.includeKey("State")
+        query2.includeKey("Type")
+        query2.includeKey("ResponsibilityDescription")
+        query2.includeKey("Responsibilities")
+        query2.whereKey("objectId", equalTo: "")
+
+        
+        query2.whereKey("Responsibilities", matchesQuery: query1)
+        query2.findObjectsInBackgroundWithBlock { (objects: [PFObject]?, error: NSError?) -> Void in
+            guard error == nil else {
+                return
+            }
+            if let objects = objects as? [MeetingItem] {
+                dump(objects)
+            }
+        }
+        
 //        
-//        let query = Contract.query()!
-//        query.includeKey("CompanyId")
-//        query.whereKey("ManagerContactId", equalTo: contact)
-//        query.findObjectsInBackgroundWithBlock {
-//            (contractsObjects:[PFObject]?, error: NSError?) -> Void in
-//            guard error == nil else {
-//                completionHandler(succeded: false, error: error, data: nil)
-//                return
-//            }
-//            if let contracts = contractsObjects as? [Contract] {
-//                arrayContracts += contracts
-//                
-//                //bloque para crear las secciones...
-//                for contract in arrayContracts{
-//                    if !arrayCompanies.contains(contract.CompanyId) {
-//                        arrayCompanies.append(contract.CompanyId)
-//                        dictionaryContracts[contract.CompanyId.Name] = []
-//                    }
-//                    dictionaryContracts[contract.CompanyId.Name]!.append(contract)
-//                }
-//                
-//                //ordena compañias por nombre.
-//                arrayCompanies.sortInPlace({
-//                    (com1 : Company, com2 : Company) -> Bool in
-//                    return com1.Name < com2.Name
-//                })
-//                
-//                //ordena los contratos por nombre.
-//                arrayContracts.sortInPlace({
-//                    (contrato1: Contract, contrato2: Contract) -> Bool in
-//                    return contrato1.Name < contrato2.Name
-//                })
-//                
-//                for companyName in dictionaryContracts.keys {
-//                    var contratos = dictionaryContracts[companyName]!
-//                    
-//                    //ordena los contratos por nombre.
-//                    contratos.sortInPlace({
-//                        (contrato1: Contract, contrato2: Contract) -> Bool in
-//                        return contrato1.Name < contrato2.Name
-//                    })
-//                    
-//                    dictionaryContracts[companyName] = contratos
-//                }
-//                
-//                data["companies"] = arrayCompanies
-//                data["contracts"] = arrayContracts
-//                data["dictionary"] = dictionaryContracts
-//                completionHandler(succeded: true, error: nil, data: data)
-//            }
-//            else{
-//                completionHandler(succeded: false, error: nil, data: nil)
-//            }
-//        }
-//    }
-    
-    /**
-     Obtiene los participantes de una reunión.
-     - parameter meeting: la reunión de la que se desea saber sus participantes.
-     - returns: un `callback` con un array de participantes (en caso de que existan).
-     */
-//    func getParticipantsBy(meeting : Meeting, completionHandler : (succeded : Bool, error : NSError?, data : [Participant]) -> ()){
-//        var arrayParticipantes : [Participant] = []
-//        let query = PFQuery(className: "Participant")
+//        let query = Responsibility.query()!
 //        query.includeKey("ContactId")
-//        query.whereKey("MeetingId", equalTo: meeting)
-//        query.findObjectsInBackgroundWithBlock({
-//            (participantObjects : [PFObject]?, error : NSError?) -> Void in
+//        query.includeKey("RolTarea")
+//        query.whereKey("objectId", containsAllObjectsInArray: activity.Responsibilities)
+//        query.findObjectsInBackgroundWithBlock { (responsibilities: [PFObject]?, error: NSError?) -> Void in
 //            guard error == nil else {
-//                print("in NuevaReunion > loadParticipants: Hubo un error al buscar los participantes.")
+//                
 //                return
 //            }
-//            
-//            if let participants = participantObjects as? [Participant]{
-//                arrayParticipantes = participants
-//                arrayParticipantes.sortInPlace { (participante1: Participant, participante2: Participant) -> Bool in
-//                    return "\(participante1.ContactId.Name) + \(participante1.ContactId.LastName)" < "\(participante2.ContactId.Name) + \(participante2.ContactId.LastName)"
-//                }
+//            guard responsibilities?.count != 0 else {
 //                
-//                completionHandler(succeded: true, error: nil, data: arrayParticipantes)
-//                
-//            }
-//            
-//        })
-//        
-//    }
-    
-//    func getMeetingItemLogsBy(meeting : Meeting, completionHandler : (succeded : Bool, error : NSError?, data : [String : [MeetingItemLog]]) -> () ){
-//        
-//        let kTypeCompromiso = arrayCodes.getCodeByName(MeetingItemType.Compromisos.rawValue)
-//        let kTypeAcuerdos = arrayCodes.getCodeByName(MeetingItemType.Acuerdos.rawValue)
-//        let kTypeInformacion = arrayCodes.getCodeByName(MeetingItemType.Info.rawValue)
-//        
-//        var arrayActivitiesLog : [MeetingItemLog] = []
-//        var arrayTopicLog : [MeetingItemLog] = []
-//        var arrayInfoLog : [MeetingItemLog] = []
-//        var data : [ String : [MeetingItemLog] ] = [:]
-//        
-//        let query = MeetingItemLog.query()!
-//        query.includeKey("Type")
-//        query.includeKey("State")
-//        query.whereKey("MeetingId", equalTo: meeting)
-//        query.findObjectsInBackgroundWithBlock {
-//            (meetingItemLogObjects : [PFObject]?, error: NSError?) -> Void in
-//            guard error == nil else {
-//                print("en ReunionesVC: \(error)")
 //                return
 //            }
-//            if let meetingItemLogs = meetingItemLogObjects as? [MeetingItemLog] {
+//            if let responsibilities = responsibilities as? [Responsibility] {
+//                activity.Responsibilities = responsibilities
 //                
-//                for meetingItemLog in meetingItemLogs{
-//                    let type = meetingItemLog.Type
-//                    if type == kTypeCompromiso! {
-//                        meetingItemLog.fetchResponsibilitiesFromParse()
-//                        arrayActivitiesLog.append(meetingItemLog)
-//                    }
-//                    else if type == kTypeAcuerdos! {
-//                        arrayTopicLog.append(meetingItemLog)
-//                    }
-//                    else if type == kTypeInformacion! {
-//                        arrayInfoLog.append(meetingItemLog)
-//                    }
-//                }
-//                
-//                arrayActivitiesLog.sortInPlace({ $0.DueDate.compare($1.DueDate) == NSComparisonResult.OrderedAscending })
-//                
-//                data[MeetingItemType.Compromisos.rawValue] = arrayActivitiesLog
-//                data[MeetingItemType.Acuerdos.rawValue] = arrayTopicLog
-//                data[MeetingItemType.Info.rawValue] = arrayInfoLog
-//                completionHandler(succeded: true, error: nil, data: data)
-//            }
-//            
-//        }
-//        
-//    }
-    
-    ///Obtiene los recursos asociados al contrato (contactos)
-//    func getResourcesBy(contract : Contract, completionHandler : (succeded : Bool, error : NSError?, data : [String : AnyObject] ) -> () ){
-//        var arrayResources : [Resource] = []
-//        var arrayParticipantes : [Participant] = []
-//        var arrayContacts : [Contact] = []
-//        var data : [String : AnyObject ] = [:]
-//        
-//        let query = Resource.query()!
-//        query.whereKey("ContractId", equalTo: contract)
-//        query.includeKey("ContactId")
-//        query.findObjectsInBackgroundWithBlock {
-//            (resourceObjects: [PFObject]?, error: NSError?) -> Void in
-//            guard error == nil else {
-//                print("en ParseConnection -> getResourcesBy: \(error)")
-//                return
-//            }
-//            if let resources = resourceObjects as? [Resource]{
-//                arrayResources = resources
-//                
-//                for resource in arrayResources {
-//                    if resource.Participa {
-//                        let participant = Participant()
-//                        participant.ContactId = resource.ContactId
-//                        participant.Mood = arrayCodes.getCodeById("jqathuiMXY")!
-//                        arrayParticipantes.append(participant)
-//                    }
-//                    arrayContacts.append(resource.ContactId)
-//                }
-//                //ordena los contactos por nombre.
-//                arrayContacts.sortInPlace({ (contact1: Contact, contact2: Contact) -> Bool in
-//                    return "\(contact1.Name) \(contact1.LastName)" < "\(contact2.Name) \(contact2.LastName)"
-//                })
-//                //ordena los participantes por nombre.
-//                arrayParticipantes.sortInPlace({
-//                    (p1: Participant, p2: Participant) -> Bool in
-//                    return "\(p1.ContactId.Name) +\(p1.ContactId.LastName)" < "\(p2.ContactId.Name) +\(p2.ContactId.LastName)"
-//                })
-//                
-//                data[typeOfArray.Recursos.rawValue] = arrayResources
-//                data[typeOfArray.Participantes.rawValue] = arrayParticipantes
-//                data[typeOfArray.Contactos.rawValue] = arrayContacts
-//                
-//                completionHandler(succeded: true, error: nil, data: data )
+//                print(responsibilities)
 //            }
 //        }
-//    }
-    
-    
+        
+    }
+
     
 }
 

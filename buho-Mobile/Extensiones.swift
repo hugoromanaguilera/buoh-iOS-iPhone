@@ -312,6 +312,18 @@ extension String {
         let date: NSDate = formatter.dateFromString(self)!
         return date
     }
+    ///pasa un String con formato medium a tipo NSDate
+    func toDate() -> NSDate? {
+        
+        let formatter = NSDateFormatter()
+        formatter.dateStyle = .MediumStyle;
+        formatter.timeStyle = .NoStyle;
+        if let date = formatter.dateFromString(self){
+            return date
+        }else{
+            return nil
+        }
+    }
     
     ///pasa un String con formato HH:mm:ss a tipo NSDate
     func stringHourToDate() -> NSDate?{

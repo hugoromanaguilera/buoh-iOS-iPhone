@@ -10,6 +10,8 @@ import UIKit
 
 class SplitDetailViewController: UISplitViewController, UISplitViewControllerDelegate {
 
+    var detailViewController: ActivityViewController? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -21,8 +23,18 @@ class SplitDetailViewController: UISplitViewController, UISplitViewControllerDel
         // Dispose of any resources that can be recreated.
     }
     
-    func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController: UIViewController!, ontoPrimaryViewController primaryViewController: UIViewController!) -> Bool{
+    func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController: UIViewController, ontoPrimaryViewController primaryViewController: UIViewController) -> Bool{
         return true
+    }
+    
+    func primaryViewControllerForCollapsingSplitViewController(splitViewController: UISplitViewController) -> UIViewController? {
+        
+        if let split = self.splitViewController {
+            let controllers = split.viewControllers
+            self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? ActivityViewController
+            return detailViewController
+        }
+        return nil
     }
 
 

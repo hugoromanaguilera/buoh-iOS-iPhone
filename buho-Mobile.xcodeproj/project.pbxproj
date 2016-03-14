@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		930DC5001C96F96C00CD6722 /* TemporalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930DC4FF1C96F96C00CD6722 /* TemporalData.swift */; };
+		930DC5021C97362700CD6722 /* DueDateViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930DC5011C97362700CD6722 /* DueDateViewCell.swift */; };
 		931862731C9098890075780D /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931862721C9098890075780D /* ActivityViewController.swift */; };
 		931862761C90995E0075780D /* ActivityViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931862751C90995E0075780D /* ActivityViewCell.swift */; };
 		9369F52F1C8756F300EFC88D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9369F52E1C8756F300EFC88D /* AppDelegate.swift */; };
@@ -47,6 +49,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		930DC4FF1C96F96C00CD6722 /* TemporalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TemporalData.swift; path = Frames/TemporalData.swift; sourceTree = "<group>"; };
+		930DC5011C97362700CD6722 /* DueDateViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DueDateViewCell.swift; path = ViewControllers/TableViewCell/DueDateViewCell.swift; sourceTree = "<group>"; };
 		931862721C9098890075780D /* ActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityViewController.swift; path = ViewControllers/ActivityViewController.swift; sourceTree = "<group>"; };
 		931862751C90995E0075780D /* ActivityViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityViewCell.swift; path = ViewControllers/TableViewCell/ActivityViewCell.swift; sourceTree = "<group>"; };
 		9369F52B1C8756F300EFC88D /* buho-Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "buho-Mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,6 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				931862751C90995E0075780D /* ActivityViewCell.swift */,
+				930DC5011C97362700CD6722 /* DueDateViewCell.swift */,
 			);
 			name = TableViewCell;
 			sourceTree = "<group>";
@@ -174,6 +179,7 @@
 				93DABB0F1C8DF6C200164B1F /* NetworkConnection.swift */,
 				93DABB111C8DF70100164B1F /* ParseConnection.swift */,
 				93DABB3B1C8DFC2500164B1F /* PersistedSettings.swift */,
+				930DC4FF1C96F96C00CD6722 /* TemporalData.swift */,
 			);
 			name = Frames;
 			sourceTree = "<group>";
@@ -294,6 +300,7 @@
 				931862731C9098890075780D /* ActivityViewController.swift in Sources */,
 				93DABB2E1C8DF94E00164B1F /* Contact.swift in Sources */,
 				931862761C90995E0075780D /* ActivityViewCell.swift in Sources */,
+				930DC5001C96F96C00CD6722 /* TemporalData.swift in Sources */,
 				939956081C90A8D3007AAB41 /* MeetingItem.swift in Sources */,
 				939E70501C9217DE004EB887 /* SplitDetailViewController.swift in Sources */,
 				939E704E1C9214B3004EB887 /* DetailActivityViewController.swift in Sources */,
@@ -305,6 +312,7 @@
 				93DABB361C8DFA1600164B1F /* TypeCode.swift in Sources */,
 				93DABB3A1C8DFBB100164B1F /* ContractViewController.swift in Sources */,
 				9369F52F1C8756F300EFC88D /* AppDelegate.swift in Sources */,
+				930DC5021C97362700CD6722 /* DueDateViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

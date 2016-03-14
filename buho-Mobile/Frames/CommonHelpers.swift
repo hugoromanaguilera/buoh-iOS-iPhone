@@ -141,3 +141,47 @@ class CommonHelpers: NSObject {
     
     
 }
+
+func getDayOfWeek(today:String)->String? {
+    
+    let formatter  = NSDateFormatter()
+    formatter.dateFormat = "dd-MM-yyyy"
+    if let todayDate = formatter.dateFromString(today) {
+        let myCalendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+        let myComponents = myCalendar.components(.Weekday, fromDate: todayDate)
+        let day = myCalendar.component(.Day, fromDate: todayDate)
+        let month = myCalendar.component(.Month, fromDate: todayDate)
+        let year = myCalendar.component(.Year, fromDate: todayDate)
+        let weekDay = myComponents.weekday
+        var dayString = String(day)
+        if day < 10 {
+            dayString = "0"+dayString
+        }
+        
+        switch weekDay {
+        case 1:
+            return "Domingo, \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
+        case 2:
+            return "Lunes, \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
+        case 3:
+            return "Martes, \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
+        case 4:
+            return "Miércoles, \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
+        case 5:
+            return "Jueves, \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
+        case 6:
+            return "Viernes, \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
+        case 7:
+            return "Sábado, \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
+        default:
+            print("Error fetching days")
+            return "Day"
+        }
+    }
+    else{
+        return nil
+    }
+}
+
+//let weekday = getDayOfWeek("2014-08-27")
+//print(weekday) // 4 = Wednesday

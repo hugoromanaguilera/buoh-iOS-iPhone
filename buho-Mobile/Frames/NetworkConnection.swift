@@ -28,7 +28,7 @@ class NetworkConnection : NSObject {
      - returns: en el callback, se returna true si es que pertenece al AD, además de los datos del contacto. En caso contrario, retorna false, sin los datos del contacto.
      */
     func postForContact(params : Dictionary<String, String>, url : String,
-        postCompleted : (succeeded: Bool, msg: String, userAndPass : [String: String], contactDictionary : [String : String]) -> ()){
+        postCompleted : (succeded: Bool, msg: String, error: NSError?, contactDictionary : [String : String]) -> ()){
             
             var contact : [String : String] = [:]
             let request = NSMutableURLRequest(URL: NSURL(string: url)!)
@@ -43,22 +43,15 @@ class NetworkConnection : NSObject {
             let task = session.dataTaskWithRequest(request) {
                 (data : NSData?, response : NSURLResponse?, error : NSError?) -> Void in
                 
-                guard data != nil else {
-                    let mensaje = "No hubo respuesta del servidor"
-                    postCompleted(succeeded: false, msg: mensaje, userAndPass: params, contactDictionary: contact)
-                    //                dispatch_async(dispatch_get_main_queue()) {
-                    //                    self.activityIndicator.stopAnimating()
-                    //                    CommonHelpers.presentOneAlertController(self, alertTitle: "Error", alertMessage: "No hubo respuesta del servidor", myActionTitle: "OK", myActionStyle: .Default)
-                    //                }
-                    return
-                }
                 guard error == nil else{
                     let mensaje = "El servicio de autenticación no está operativo"
-                    postCompleted(succeeded: false, msg: mensaje, userAndPass: params, contactDictionary: contact)
-                    //                dispatch_async(dispatch_get_main_queue()) {
-                    //                    self.activityIndicator.stopAnimating()
-                    //                    CommonHelpers.presentOneAlertController(self, alertTitle: "Error", alertMessage: "El servicio de autenticación no está operativo", myActionTitle: "OK", myActionStyle: .Default)
-                    //                }
+                    postCompleted(succeded: false, msg: mensaje, error: error, contactDictionary: contact)
+                    return
+                }
+                
+                guard data != nil else {
+                    let mensaje = "No hubo respuesta del servidor"
+                    postCompleted(succeded: false, msg: mensaje, error: nil, contactDictionary: contact)
                     return
                 }
                 
@@ -80,13 +73,13 @@ class NetworkConnection : NSObject {
                             mensaje = "Login con éxito"
                         }
                         print("success: \(success)")
-                        postCompleted(succeeded: success, msg: mensaje, userAndPass: params, contactDictionary : contact)
+                        postCompleted(succeded: success, msg: mensaje, error: nil, contactDictionary : contact)
                         return
                     } else {
                         let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)    // No error thrown, but not NSDictionary
                         let mensaje = "Error could not parse JSON."
                         print("\(mensaje): \(jsonStr)" )
-                        postCompleted(succeeded: false, msg: mensaje, userAndPass: params, contactDictionary: contact )
+                        postCompleted(succeded: false, msg: mensaje, error: nil, contactDictionary: contact )
                         return
                     }
                 } catch let parseError {
@@ -94,7 +87,7 @@ class NetworkConnection : NSObject {
                     let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
                     let mensaje = "Error could not parse JSON."
                     print(jsonStr)
-                    postCompleted(succeeded: false, msg: mensaje, userAndPass: params, contactDictionary: contact )
+                    postCompleted(succeded: false, msg: mensaje, error: nil, contactDictionary: contact )
                 }
             }
             
