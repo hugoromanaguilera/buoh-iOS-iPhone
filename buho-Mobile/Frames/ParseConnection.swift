@@ -288,6 +288,22 @@ class ParseConnection {
         }
     }
     
+    func saveAllInBackground(objects: [PFObject], completion: (succeded: Bool, error: NSError?) -> () ) {
+        
+        PFObject.saveAllInBackground(objects) { (succeded: Bool, error: NSError?) -> Void in
+            guard error == nil else {
+                completion(succeded: false, error: error)
+                return
+            }
+            guard succeded else {
+                completion(succeded: false, error: nil)
+                return
+            }
+            completion(succeded: true, error: nil)
+        }
+
+    }
+    
     
     func getResponsibilitiesByActivity(activity: MeetingItem) {
         

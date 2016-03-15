@@ -40,23 +40,9 @@ class ActivityViewController: UITableViewController {
     var arrayDateSelfActivities: [String] = []
     var isSelf: Bool = false
     
-    var start = NSDate()
-    var end = NSDate()
-    var isEarlyEnd : Bool = false {
-        didSet {
-            if isEarlyEnd {
-
-            }else{
-
-            }
-        }
-    }
-    
+    //MARK: - Lyfe cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-//        //para que las celdas se ajusten al tamaño del texto.
-//        tableView.rowHeight = UITableViewAutomaticDimension
-//        tableView.estimatedRowHeight = 160.0
         
         activityIndicator.hidesWhenStopped = true
         
@@ -65,44 +51,6 @@ class ActivityViewController: UITableViewController {
             loadActivities(contract)
         }
     }
-    
-    
-    @IBAction func filterAction(sender: UIBarButtonItem) {
-        let actionSheet = UIAlertController(title: nil, message: "Seleccione el tipo de filtro:", preferredStyle: .ActionSheet)
-        actionSheet.view.tintColor = UIColor(red: 142/255, green: 68/255, blue: 173/255, alpha: 1)
-        
-//        let view = UIView(frame: CGRect(x: 8.0, y: 8.0, width: actionSheet.view.bounds.size.width - 8.0 * 4.5, height: 120.0))
-//        view.backgroundColor = UIColor.greenColor()
-//        actionSheet.view.addSubview(view)
-        let contratoAction = UIAlertAction(title: "Contrato", style: .Default) { _ in
-            let image = UIImage(named: "filterOutline-24")
-            self.filterButton.image = image
-            
-            self.arrayExpandSections = [Bool](count: self.dictionaryActivities.count, repeatedValue: true)
-            self.isSelf = false
-            self.tableView.reloadData()
-        }
-        
-        let propiosAction = UIAlertAction(title: "Propios", style: .Default) { _ in
-            let image = UIImage(named: "filter-24")
-            self.filterButton.image = image
-            
-            self.arrayExpandSections = [Bool](count: self.dictionarySelfActivities.count, repeatedValue: true)
-            self.isSelf = true
-            self.tableView.reloadData()
-        }
-        actionSheet.addAction(contratoAction)
-        actionSheet.addAction(propiosAction)
-        
-        actionSheet.addAction(UIAlertAction(title: "Cancelar", style: .Cancel, handler: nil))
-        presentViewController(actionSheet, animated: true, completion: nil)
-        
-    }
-    
-    @IBAction func logoutAction(sender: UIBarButtonItem) {
-        CommonHelpers.logout(self)
-    }
-    
     
     // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -202,161 +150,39 @@ class ActivityViewController: UITableViewController {
         headerView.textLabel?.textColor = UIColor(red: 142/255, green: 68/255, blue: 142/255, alpha: 1)
     }
     
-    
-    
-    
-    
-//    
-//    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return 50
-//    }
-//    
-//    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-//        return 1
-//    }
-    
-//    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//        if(arrayForBool .objectAtIndex(indexPath.section).boolValue == true){
-//            return 216
-//        }
-//        return 2;
-//    }
-    
-//    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        
-//        let headerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 40))
-//        headerView.tag = section
-//        
-//        let headerString = UILabel(frame: CGRect(x: 10, y: 10, width: tableView.frame.size.width-10, height: 30)) as UILabel
-//        
-//        if self.isEarlyEnd {
-//            if section == 1 {
-//                let text = sectionTitleArray[section]
-//                let attributeString: NSMutableAttributedString = NSMutableAttributedString(string: text)
-//                attributeString.addAttribute(NSStrikethroughStyleAttributeName, value: 2, range: NSMakeRange(0, attributeString.length))
-//                headerString.attributedText = attributeString
-//                headerView.addSubview(headerString)
-//            }else{
-//                headerString.text = sectionTitleArray[section]
-//                headerView.addSubview(headerString)
-//            }
-//        }else {
-//            headerString.text = sectionTitleArray[section]
-//            headerView.addSubview(headerString)
-//        }
-//
-//        let headerTapped = UITapGestureRecognizer (target: self, action:"sectionHeaderTapped:")
-//        headerView.addGestureRecognizer(headerTapped)
-//        
-//        return headerView
-//    }
-    
-//    func sectionHeaderTapped(recognizer: UITapGestureRecognizer) {
-//        //revisa si otra sección está expandida para cerrarla.
-//        var index: Int
-//        for index = 0; index < 2; index++ {
-//            if (arrayForBool[index].boolValue == true) && (recognizer.view!.tag != index) {
-//                var collapsed = arrayForBool[index].boolValue
-//                collapsed       = !collapsed;
-//                arrayForBool.replaceObjectAtIndex(index, withObject: collapsed)
-//                let range = NSMakeRange(index, 1)
-//                let sectionToReload = NSIndexSet(indexesInRange: range)
-//                self.tableView.reloadSections(sectionToReload, withRowAnimation: UITableViewRowAnimation.Automatic)
-//                break
-//            }
-//        }
-//        
-//        //ahora contrae/expande la sección seleccionada.
-//        let indexPath : NSIndexPath = NSIndexPath(forRow: 0, inSection:(recognizer.view?.tag as Int!)!)
-//        if (indexPath.row == 0) {
-//            
-//            var collapsed = arrayForBool[indexPath.section].boolValue
-//            collapsed       = !collapsed;
-//            
-//            arrayForBool .replaceObjectAtIndex(indexPath.section, withObject: collapsed)
-//            
-//            //reload specific section animated
-//            let range = NSMakeRange(indexPath.section, 1)
-//            let sectionToReload = NSIndexSet(indexesInRange: range)
-//            self.tableView .reloadSections(sectionToReload, withRowAnimation:UITableViewRowAnimation.Automatic)
-//            
-//        }
-//        
-//    }
-    
-
+    //MARK: - Funciones
+    @IBAction func filterAction(sender: UIBarButtonItem) {
+        let actionSheet = UIAlertController(title: nil, message: "Seleccione el tipo de filtro:", preferredStyle: .ActionSheet)
+        actionSheet.view.tintColor = UIColor(red: 142/255, green: 68/255, blue: 173/255, alpha: 1)
         
-//        cell.textLabel!.text = activities[indexPath.row].Detail //arraySelfActivities[indexPath.row].Detail//arrayMeetingItems[indexPath.row].Detail
+        let contratoAction = UIAlertAction(title: "Contrato", style: .Default) { _ in
+            let image = UIImage(named: "filterOutline-24")
+            self.filterButton.image = image
+            
+            self.arrayExpandSections = [Bool](count: self.dictionaryActivities.count, repeatedValue: true)
+            self.isSelf = false
+            self.tableView.reloadData()
+        }
         
+        let propiosAction = UIAlertAction(title: "Propios", style: .Default) { _ in
+            let image = UIImage(named: "filter-24")
+            self.filterButton.image = image
+            
+            self.arrayExpandSections = [Bool](count: self.dictionarySelfActivities.count, repeatedValue: true)
+            self.isSelf = true
+            self.tableView.reloadData()
+        }
+        actionSheet.addAction(contratoAction)
+        actionSheet.addAction(propiosAction)
         
-//        if indexPath.section == 0 {
-//            cell.datePicker.date = start
-//        }else{
-//            cell.datePicker.date = end
-//        }
-//        
-//        cell.datePicker.datePickerMode = UIDatePickerMode.DateAndTime
-//        cell.datePicker.tag = indexPath.section
-//        cell.datePicker.addTarget(self, action: "changeDate:", forControlEvents: UIControlEvents.ValueChanged)
+        actionSheet.addAction(UIAlertAction(title: "Cancelar", style: .Cancel, handler: nil))
+        presentViewController(actionSheet, animated: true, completion: nil)
         
-//        return cell
+    }
     
-//    func changeDate(sender: UIDatePicker){
-//        
-//        switch sender.tag {
-//            
-//        case 0:
-//            start = sender.date
-//            //            self.isEarlyEnd = false
-//            switch start.compare(end){
-//            case .OrderedDescending:
-//                self.isEarlyEnd = true
-//            default:
-//                self.isEarlyEnd = false
-//            }
-////            sectionTitleArray[sender.tag] = "Hora Inicio:       \(start.getDateAndHourString()!) Hrs."
-//            //            self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
-//        case 1:
-//            end = sender.date
-//            
-//            // Compare them
-//            switch end.compare(start) {
-//            case .OrderedAscending:
-//                isEarlyEnd = true
-//            default:
-//                self.isEarlyEnd = false
-//            }
-////            sectionTitleArray[sender.tag] = "Hora Término:    \(end.getDateAndHourString()!) Hrs."
-//            //            self.tableView.reloadSections(NSIndexSet(index: 1), withRowAnimation: UITableViewRowAnimation.None)
-//        default:
-//            print("")
-//        }
-//    }
-    
-//    @IBAction func buttonAction(sender: UIButton) {
-//        print("apreté el botón")
-//        var data: [String : NSDate] = [:]
-//        
-//        data["start"] = start
-//        data["end"] = end
-//        
-//        if let myDelegate = self.delegate {
-//            myDelegate.saveDate(data)
-//            self.dismissViewControllerAnimated(true, completion: nil)
-//        }
-//    }
-
-
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//        if let destino = segue.destinationViewController as? DetailActivityViewController {
-//            if let send = sender as? MeetingItem{
-//                destino.activity = send
-//            }
-//        }
-//    }
+    @IBAction func logoutAction(sender: UIBarButtonItem) {
+        CommonHelpers.logout(self)
+    }
     
     func loadActivities(contract: Contract){
         activityIndicator.startAnimating()
@@ -370,11 +196,6 @@ class ActivityViewController: UITableViewController {
                     self.arrayMeetingItems = compromisos
                     self.loadSelfActivities()
                 }
-//                dispatch_async(dispatch_get_main_queue() ) {
-//                    self.tmpData.compromisos = data!["activities"] as! [MeetingItem]
-//                    self.arrayMeetingItems = self.tmpData.compromisos!
-//                    self.loadSelfActivities()
-//                }
             }
         })
     }
@@ -405,28 +226,28 @@ class ActivityViewController: UITableViewController {
         arraySelfActivities.sortInPlace({   $0.DueDate.isLessThanDate($1.DueDate) })
         
         for activity in arrayMeetingItems {
-            if dicActivities[activity.DueDate.ToDateMediumString() as! String] == nil {
-                dicActivities[activity.DueDate.ToDateMediumString() as! String] = []
+            if dicActivities[activity.DueDate.dateToString() as! String] == nil {
+                dicActivities[activity.DueDate.dateToString() as! String] = []
             }
-            dicActivities[activity.DueDate.ToDateMediumString() as! String]!.append(activity)
+            dicActivities[activity.DueDate.dateToString() as! String]!.append(activity)
         }
         
         for activity in arraySelfActivities {
-            if dicSelfActivities[activity.DueDate.ToDateMediumString() as! String] == nil {
-                dicSelfActivities[activity.DueDate.ToDateMediumString() as! String] = []
+            if dicSelfActivities[activity.DueDate.dateToString() as! String] == nil {
+                dicSelfActivities[activity.DueDate.dateToString() as! String] = []
             }
-            dicSelfActivities[activity.DueDate.ToDateMediumString() as! String]!.append(activity)
+            dicSelfActivities[activity.DueDate.dateToString() as! String]!.append(activity)
         }
         
         arrayDateActivities = [String](dicActivities.keys)
         arrayDateSelfActivities = [String](dicSelfActivities.keys)
         
         arrayDateActivities.sortInPlace {
-            $0.toDate()!.isLessThanDate($1.toDate()!)
+            $0.stringToDate()!.isLessThanDate($1.stringToDate()!)
         }
         
         arrayDateSelfActivities.sortInPlace {
-            $0.toDate()!.isLessThanDate($1.toDate()!)
+            $0.stringToDate()!.isLessThanDate($1.stringToDate()!)
         }
 
         

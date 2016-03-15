@@ -181,6 +181,8 @@ func getDayOfWeek(today:String)->String? {
     else{
         return nil
     }
+    
+
 }
 
 //let weekday = getDayOfWeek("2014-08-27")

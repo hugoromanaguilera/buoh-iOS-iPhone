@@ -180,7 +180,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
     
     func registrarParseSubclasses() {
-        
+        CommentsApproval.registerSubclass()
 //        Comment.registerSubclass()
         TypeCode.registerSubclass()
         Code.registerSubclass()

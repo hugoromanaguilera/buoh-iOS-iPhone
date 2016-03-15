@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0492503C90307DBF154F730A /* Pods_buho_Mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287969D342CB97B8F3949A09 /* Pods_buho_Mobile.framework */; };
 		930DC5001C96F96C00CD6722 /* TemporalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930DC4FF1C96F96C00CD6722 /* TemporalData.swift */; };
 		930DC5021C97362700CD6722 /* DueDateViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930DC5011C97362700CD6722 /* DueDateViewCell.swift */; };
 		931862731C9098890075780D /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931862721C9098890075780D /* ActivityViewController.swift */; };
@@ -20,7 +21,7 @@
 		9399560A1C90A91F007AAB41 /* Responsibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939956091C90A91F007AAB41 /* Responsibility.swift */; };
 		9399560C1C90AA96007AAB41 /* Extensiones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9399560B1C90AA96007AAB41 /* Extensiones.swift */; };
 		939E704E1C9214B3004EB887 /* DetailActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E704D1C9214B3004EB887 /* DetailActivityViewController.swift */; };
-		939E70501C9217DE004EB887 /* SplitDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E704F1C9217DE004EB887 /* SplitDetailViewController.swift */; };
+		93A3C7F61C985BFF000053A0 /* CommentsApproval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A3C7F51C985BFF000053A0 /* CommentsApproval.swift */; };
 		93C7FEAD1C8D222800926DB3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C7FEAC1C8D222800926DB3 /* LoginViewController.swift */; };
 		93C7FEB11C8D4B6500926DB3 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C7FEB01C8D4B6500926DB3 /* CustomButton.swift */; };
 		93DABB0E1C8DF64900164B1F /* CommonHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93DABB0D1C8DF64900164B1F /* CommonHelpers.swift */; };
@@ -49,6 +50,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		287969D342CB97B8F3949A09 /* Pods_buho_Mobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_buho_Mobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		451DD7CEB2A7BCC57F2BB501 /* Pods-buho-Mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-buho-Mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-buho-Mobile/Pods-buho-Mobile.debug.xcconfig"; sourceTree = "<group>"; };
 		930DC4FF1C96F96C00CD6722 /* TemporalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TemporalData.swift; path = Frames/TemporalData.swift; sourceTree = "<group>"; };
 		930DC5011C97362700CD6722 /* DueDateViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DueDateViewCell.swift; path = ViewControllers/TableViewCell/DueDateViewCell.swift; sourceTree = "<group>"; };
 		931862721C9098890075780D /* ActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityViewController.swift; path = ViewControllers/ActivityViewController.swift; sourceTree = "<group>"; };
@@ -64,7 +67,7 @@
 		939956091C90A91F007AAB41 /* Responsibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Responsibility.swift; path = Models/Responsibility.swift; sourceTree = "<group>"; };
 		9399560B1C90AA96007AAB41 /* Extensiones.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensiones.swift; sourceTree = "<group>"; };
 		939E704D1C9214B3004EB887 /* DetailActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DetailActivityViewController.swift; path = ViewControllers/DetailActivityViewController.swift; sourceTree = "<group>"; };
-		939E704F1C9217DE004EB887 /* SplitDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SplitDetailViewController.swift; path = ViewControllers/SplitDetailViewController.swift; sourceTree = "<group>"; };
+		93A3C7F51C985BFF000053A0 /* CommentsApproval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentsApproval.swift; path = Models/CommentsApproval.swift; sourceTree = "<group>"; };
 		93C7FEAC1C8D222800926DB3 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ViewControllers/LoginViewController.swift; sourceTree = "<group>"; };
 		93C7FEB01C8D4B6500926DB3 /* CustomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomButton.swift; path = Frames/CustomButton.swift; sourceTree = "<group>"; };
 		93DABB0D1C8DF64900164B1F /* CommonHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommonHelpers.swift; path = Frames/CommonHelpers.swift; sourceTree = "<group>"; };
@@ -90,6 +93,7 @@
 		93DABB371C8DFA5B00164B1F /* Resource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Resource.swift; path = Models/Resource.swift; sourceTree = "<group>"; };
 		93DABB391C8DFBB100164B1F /* ContractViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContractViewController.swift; path = ViewControllers/ContractViewController.swift; sourceTree = "<group>"; };
 		93DABB3B1C8DFC2500164B1F /* PersistedSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersistedSettings.swift; path = Frames/PersistedSettings.swift; sourceTree = "<group>"; };
+		9C646DAB0038D84370892D64 /* Pods-buho-Mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-buho-Mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-buho-Mobile/Pods-buho-Mobile.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,12 +113,22 @@
 				93DABB191C8DF86F00164B1F /* libsqlite3.tbd in Frameworks */,
 				93DABB151C8DF81100164B1F /* Parse.framework in Frameworks */,
 				93DABB171C8DF81C00164B1F /* Bolts.framework in Frameworks */,
+				0492503C90307DBF154F730A /* Pods_buho_Mobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7B913BB89585CCB55804A823 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				451DD7CEB2A7BCC57F2BB501 /* Pods-buho-Mobile.debug.xcconfig */,
+				9C646DAB0038D84370892D64 /* Pods-buho-Mobile.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		931862741C9099280075780D /* TableViewCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -129,6 +143,8 @@
 			children = (
 				9369F52D1C8756F300EFC88D /* buho-Mobile */,
 				9369F52C1C8756F300EFC88D /* Products */,
+				7B913BB89585CCB55804A823 /* Pods */,
+				C3844AB7900658828F0C5D38 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -165,7 +181,6 @@
 				93DABB391C8DFBB100164B1F /* ContractViewController.swift */,
 				931862721C9098890075780D /* ActivityViewController.swift */,
 				939E704D1C9214B3004EB887 /* DetailActivityViewController.swift */,
-				939E704F1C9217DE004EB887 /* SplitDetailViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -214,8 +229,17 @@
 				93DABB371C8DFA5B00164B1F /* Resource.swift */,
 				939956071C90A8D3007AAB41 /* MeetingItem.swift */,
 				939956091C90A91F007AAB41 /* Responsibility.swift */,
+				93A3C7F51C985BFF000053A0 /* CommentsApproval.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		C3844AB7900658828F0C5D38 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				287969D342CB97B8F3949A09 /* Pods_buho_Mobile.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -225,9 +249,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9369F5401C8756F300EFC88D /* Build configuration list for PBXNativeTarget "buho-Mobile" */;
 			buildPhases = (
+				0AA9B6043954BA56986CBE05 /* Check Pods Manifest.lock */,
 				9369F5271C8756F300EFC88D /* Sources */,
 				9369F5281C8756F300EFC88D /* Frameworks */,
 				9369F5291C8756F300EFC88D /* Resources */,
+				A091304A3EFC46682153B260 /* Embed Pods Frameworks */,
+				BDF9A5BE51D946E2BB3FE99C /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -284,6 +311,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		0AA9B6043954BA56986CBE05 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A091304A3EFC46682153B260 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-buho-Mobile/Pods-buho-Mobile-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BDF9A5BE51D946E2BB3FE99C /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-buho-Mobile/Pods-buho-Mobile-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		9369F5271C8756F300EFC88D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -302,7 +377,6 @@
 				931862761C90995E0075780D /* ActivityViewCell.swift in Sources */,
 				930DC5001C96F96C00CD6722 /* TemporalData.swift in Sources */,
 				939956081C90A8D3007AAB41 /* MeetingItem.swift in Sources */,
-				939E70501C9217DE004EB887 /* SplitDetailViewController.swift in Sources */,
 				939E704E1C9214B3004EB887 /* DetailActivityViewController.swift in Sources */,
 				93C7FEAD1C8D222800926DB3 /* LoginViewController.swift in Sources */,
 				9399560C1C90AA96007AAB41 /* Extensiones.swift in Sources */,
@@ -310,6 +384,7 @@
 				93DABB301C8DF97B00164B1F /* Contract.swift in Sources */,
 				93DABB0E1C8DF64900164B1F /* CommonHelpers.swift in Sources */,
 				93DABB361C8DFA1600164B1F /* TypeCode.swift in Sources */,
+				93A3C7F61C985BFF000053A0 /* CommentsApproval.swift in Sources */,
 				93DABB3A1C8DFBB100164B1F /* ContractViewController.swift in Sources */,
 				9369F52F1C8756F300EFC88D /* AppDelegate.swift in Sources */,
 				930DC5021C97362700CD6722 /* DueDateViewCell.swift in Sources */,
@@ -421,6 +496,7 @@
 		};
 		9369F5411C8756F300EFC88D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 451DD7CEB2A7BCC57F2BB501 /* Pods-buho-Mobile.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -438,6 +514,7 @@
 		};
 		9369F5421C8756F300EFC88D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9C646DAB0038D84370892D64 /* Pods-buho-Mobile.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
