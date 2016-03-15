@@ -62,6 +62,8 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
 
     }
     
+    
+    
     override func willMoveToParentViewController(parent: UIViewController?) {
         if parent == nil {
             // Back btn Event handler
@@ -80,51 +82,34 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
             return 1
         }
     }
-
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section{
-        case 4:
-            return (activity?.Responsibilities.count)!
-        case 5:
-            return temporalComments.count
-        default:
-            return 1
-        }
-        
-    }
     
 
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section{
-        case 0:
-            return "Descripción"
-        case 1:
-            return "Creada el"
-        case 2:
-            return "Fecha Plazo"
-        case 3:
-            return "Estado"
-        case 4:
-            return "Responsables"
-        case 5:
-            return "Comentarios"
-        default:
-            return "Sección extra."
+    // Override to support conditional editing of the table view.
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if indexPath.section == 5 {
+            return true
+        }else {
+            return false
+        }
+    }
+
+    // Override to support editing the table view.
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            // Delete the row from the data source
+            let commentForDelete = temporalComments.removeAtIndex(indexPath.row)
+            if let index = newComments.getIndexForComment(commentForDelete) {
+                newComments.removeAtIndex(index)
+            }
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
     }
     
-    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        // Gets the header view as a UITableViewHeaderFooterView and changes the text colour
-        let headerView: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
-        headerView.textLabel!.textColor = UIColor(red: 142/255, green: 68/255, blue: 173/255, alpha: 1)
-    }
-    
-
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cellID = "cellDetailActivity"
         let cellDueDate = "cellDueDateActivity"
         let cell = tableView.dequeueReusableCellWithIdentifier(cellID)!
-
+        
         switch indexPath.section {
         case 0:
             cell.textLabel?.text = activity?.Detail
@@ -157,7 +142,49 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
         
         return cell
     }
+
+
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch section{
+        case 4:
+            return (activity?.Responsibilities.count)!
+        case 5:
+            return temporalComments.count
+        default:
+            return 1
+        }
+        
+    }
     
+    func tableView(tableView: UITableView, titleForDeleteConfirmationButtonForRowAtIndexPath indexPath: NSIndexPath) -> String? {
+        return "Eliminar"
+    }
+
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section{
+        case 0:
+            return "Descripción"
+        case 1:
+            return "Creada el"
+        case 2:
+            return "Fecha Plazo"
+        case 3:
+            return "Estado"
+        case 4:
+            return "Responsables"
+        case 5:
+            return "Comentarios"
+        default:
+            return "Sección extra."
+        }
+    }
+    
+    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        // Gets the header view as a UITableViewHeaderFooterView and changes the text colour
+        let headerView: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
+        headerView.textLabel!.textColor = UIColor(red: 142/255, green: 68/255, blue: 173/255, alpha: 1)
+    }
+
     //MARK: - Funciones
     func loadActivity(){
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0)) {
@@ -196,7 +223,6 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     //MARK: - Selector for Notification Keyboard and delegates
-    
     func addNotifications(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
@@ -211,10 +237,8 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
         if let newHeight = notification.userInfo?[UIKeyboardFrameEndUserInfoKey]?.CGRectValue.size.height {
             
             UIView.animateWithDuration(0.5, delay: 1.0, options: UIViewAnimationOptions.TransitionCurlUp, animations: { () -> Void in
-                
                 self.inputContainerViewBottom.constant = newHeight
-                
-                }, completion: nil)
+            }, completion: nil)
         }
     }
     
@@ -223,7 +247,7 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func setTextView(){
-        
+
         self.growingTextView.layer.cornerRadius = 4
         self.growingTextView.backgroundColor = UIColor(white: 0.9, alpha: 1)
         self.growingTextView.placeholderAttributedText = NSAttributedString(string: placeholder)
@@ -235,7 +259,6 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
             self.addCommentButton.enabled = false
             self.growingTextView.text = ""
             self.growingTextView.placeholderAttributedText = NSAttributedString(string: self.placeholder)
-
         }
         
         growingTextView.delegates.shouldChangeTextInRange = { (range: NSRange, replacementText: String) -> Bool in
@@ -249,22 +272,19 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
             return true
         }
         
-        
     }
     
     @IBAction func handleSendButton(sender: AnyObject) {
         let comentario = checkTimeStamp(growingTextView.text )
         temporalComments.append(comentario)
         if let actividad = activity{
-            newComments.append(CommentsApproval(ForeignObjectId: actividad.objectId!, Comment: comentario) )
+            newComments.append(CommentsApproval(ForeignObjectId: actividad.objectId!, Comment: comentario, ContactId: tmpData.contacto!) )
         }
         
         tableView.reloadSections(NSIndexSet(index: 5), withRowAnimation: .Automatic)
 
         self.growingTextView.resignFirstResponder()
     }
-    
-    
     
     ///comprobar si ya existe una fecha en el comentario para no agregar otra fecha:
     func checkTimeStamp(comment: String) -> String{
@@ -300,8 +320,6 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss - "
         let timeStamp = dateFormatter.stringFromDate(fecha)
         return timeStamp
-        
     }
-
 
 }

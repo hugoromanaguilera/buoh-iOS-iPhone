@@ -107,6 +107,17 @@ extension Array{
         }
         return false
     }
+    
+    func getIndexForComment(comment: String) -> Int?{
+        var i: Int
+        for i = 0; i < self.count; i += 1 {
+            let object = self[i]
+            if let commentApproval = object as? CommentsApproval {
+                if commentApproval.Comment == comment { return i }
+            }
+        }
+        return nil
+    }
 
 //    /****
 //    Obtiene el participante de un arreglo de participantes a partir de un contacto

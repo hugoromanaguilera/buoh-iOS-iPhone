@@ -158,25 +158,11 @@ func getDayOfWeek(today:String)->String? {
             dayString = "0"+dayString
         }
         
-        switch weekDay {
-        case 1:
-            return "Domingo, \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
-        case 2:
-            return "Lunes, \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
-        case 3:
-            return "Martes, \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
-        case 4:
-            return "Miércoles, \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
-        case 5:
-            return "Jueves, \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
-        case 6:
-            return "Viernes, \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
-        case 7:
-            return "Sábado, \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
-        default:
-            print("Error fetching days")
-            return "Day"
-        }
+        let dayLiteral = formatter.standaloneWeekdaySymbols[weekDay - 1]
+ 
+        let dayFormatter = "\(dayLiteral), \(dayString) \(formatter.standaloneMonthSymbols[month-1]) \(year)"
+        
+        return dayFormatter
     }
     else{
         return nil

@@ -23,6 +23,7 @@ class LoginViewController: UIViewController{
     var networkConnection : NetworkConnection = NetworkConnection.sharedInstance
     var parseConnection : ParseConnection = ParseConnection.sharedInstance
     var persistedSettings : PersistedSettings = PersistedSettings.sharedInstance
+    var tmpData: TemporalData = TemporalData.sharedInstance
     
     //MARK: - Life cycle:
     override func viewDidLoad() {
@@ -82,6 +83,7 @@ class LoginViewController: UIViewController{
                         return
                     }
                     
+                    self.tmpData.contacto = contact
                     self.contact = contact
                     
                     //3) Si se encuentra el contact, entonces entrará a la aplicación.
@@ -103,8 +105,11 @@ class LoginViewController: UIViewController{
                         return
                     }
                     if let cont = user?.objectForKey("ContactId") as? Contact {
+                        if !cont.dataAvailable {
+                            cont.fetchIfNeededInBackground()
+                        }
+                        self.tmpData.contacto = cont
                         self.contact = cont
-                        self.contact?.fetchIfNeededInBackground()
                     }
                     
                     

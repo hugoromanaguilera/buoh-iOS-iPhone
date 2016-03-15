@@ -12,6 +12,7 @@ class TemporalData {
     
     private var _compromisos: [MeetingItem]?
     private var _actividad: MeetingItem? = nil
+    private var _contacto: Contact? = nil
     
     // singleton
     class var sharedInstance : TemporalData {
@@ -41,9 +42,15 @@ class TemporalData {
         }
         set{
             _actividad = newValue
-//            if let _act = _actividad {
-//                _act.fetchContacts()
-//            }
+        }
+    }
+    
+    var contacto: Contact? {
+        get {
+            return _contacto
+        }
+        set {
+            _contacto = newValue
         }
     }
     
