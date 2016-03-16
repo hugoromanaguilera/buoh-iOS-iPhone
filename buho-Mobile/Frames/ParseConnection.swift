@@ -331,27 +331,6 @@ class ParseConnection {
             }
         }
         
-//        
-//        let query = Responsibility.query()!
-//        query.includeKey("ContactId")
-//        query.includeKey("RolTarea")
-//        query.whereKey("objectId", containsAllObjectsInArray: activity.Responsibilities)
-//        query.findObjectsInBackgroundWithBlock { (responsibilities: [PFObject]?, error: NSError?) -> Void in
-//            guard error == nil else {
-//                
-//                return
-//            }
-//            guard responsibilities?.count != 0 else {
-//                
-//                return
-//            }
-//            if let responsibilities = responsibilities as? [Responsibility] {
-//                activity.Responsibilities = responsibilities
-//                
-//                print(responsibilities)
-//            }
-//        }
-        
     }
 
     

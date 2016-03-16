@@ -171,5 +171,34 @@ func getDayOfWeek(today:String)->String? {
 
 }
 
+func timeStampOfString(comment: String) -> NSDate{
+    //    var newComment = ""
+    //1) se prepara la comprobación
+    //si la cant. de caracteres es menor a: "yyyy-MM-dd HH:mm:ss"
+    if comment.characters.count <= 18 {
+        //        newComment = convertDateToTimestamp(NSDate() ) + comment
+        return NSDate()
+    }
+    else{
+        let indexRange = comment.startIndex.advancedBy(19)
+        let subcomment = comment.substringToIndex(indexRange)
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+        //2) se realiza la comprobación de fecha en el comentario:
+        if dateFormatter.dateFromString(subcomment) == nil {
+            return NSDate()
+            //            newComment = convertDateToTimestamp(NSDate() ) + comment
+        }
+        else{
+            return dateFormatter.dateFromString(subcomment)!
+            //            newComment = comment
+        }
+    }
+    
+    //    return newComment
+}
+
 //let weekday = getDayOfWeek("2014-08-27")
 //print(weekday) // 4 = Wednesday

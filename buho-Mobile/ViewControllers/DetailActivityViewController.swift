@@ -215,6 +215,9 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
     func setActivity(){
         self.activity = self.tmpData.actividad
         self.temporalComments = self.activity!.Comments
+        self.temporalComments.sortInPlace({ (c1: String, c2: String) -> Bool in
+            timeStampOfString(c1).isGreaterThanDate(timeStampOfString(c2))
+        })
         self.isDataAvailable = true
         dispatch_async(dispatch_get_main_queue() ) {
             self.activityIndicator.stopAnimating()
@@ -276,7 +279,7 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
     
     @IBAction func handleSendButton(sender: AnyObject) {
         let comentario = checkTimeStamp(growingTextView.text )
-        temporalComments.append(comentario)
+        temporalComments.insert(comentario, atIndex: 0) // append(comentario)
         if let actividad = activity{
             newComments.append(CommentsApproval(Comment: comentario, ContactId: tmpData.contacto!, contract: tmpData.contrato!, mItem: actividad) )
         }
