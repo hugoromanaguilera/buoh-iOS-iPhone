@@ -24,11 +24,13 @@ class CommentsApproval: PFObject, PFSubclassing {
         return "CommentsApproval"
     }
     
-    init(ForeignObjectId: String, Comment: String, ContactId: Contact) {
+    init(ForeignObjectId: String, Comment: String, ContactId: Contact, contract: Contract, mItem: MeetingItem) {
         super.init()
         self.ForeignObjectId = ForeignObjectId
         self.Comment = Comment
         self.ContactId = ContactId
+        self.ContractId = contract
+        self.MeetingItemId = mItem
         Approved = false
     }
     
@@ -37,5 +39,7 @@ class CommentsApproval: PFObject, PFSubclassing {
     @NSManaged var Comment: String
     @NSManaged var Approved: Bool
     @NSManaged var ContactId: Contact
+    @NSManaged var ContractId: Contract
+    @NSManaged var MeetingItemId: MeetingItem
     
 }

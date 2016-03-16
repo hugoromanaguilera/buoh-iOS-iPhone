@@ -278,7 +278,7 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
         let comentario = checkTimeStamp(growingTextView.text )
         temporalComments.append(comentario)
         if let actividad = activity{
-            newComments.append(CommentsApproval(ForeignObjectId: actividad.objectId!, Comment: comentario, ContactId: tmpData.contacto!) )
+            newComments.append(CommentsApproval(ForeignObjectId: actividad.objectId!, Comment: comentario, ContactId: tmpData.contacto!, contract: tmpData.contrato!, mItem: actividad) )
         }
         
         tableView.reloadSections(NSIndexSet(index: 5), withRowAnimation: .Automatic)
