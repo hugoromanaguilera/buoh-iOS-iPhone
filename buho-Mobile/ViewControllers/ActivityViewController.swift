@@ -17,6 +17,8 @@ private let segueToDetail = "detailActivity"
 
 class ActivityViewController: UITableViewController {
     
+    var refresher: UIRefreshControl!
+    
     //MARK: - Variables
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var filterButton: UIBarButtonItem!
@@ -43,6 +45,11 @@ class ActivityViewController: UITableViewController {
     //MARK: - Lyfe cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        refresher = UIRefreshControl()
+        refresher.addTarget(self, action: "refresh", forControlEvents: .ValueChanged)
+        
+        tableView.addSubview(refresher)
         
         activityIndicator.hidesWhenStopped = true
         
@@ -185,7 +192,9 @@ class ActivityViewController: UITableViewController {
     }
     
     func loadActivities(contract: Contract){
-        activityIndicator.startAnimating()
+        if !self.refresher.refreshing {
+            activityIndicator.startAnimating()
+        }
         pConnection.getActivitiesForContract(contract, completionHandler: { (succeded, error, data) -> () in
             guard error == nil else {
                 self.activityIndicator.stopAnimating()
@@ -257,6 +266,18 @@ class ActivityViewController: UITableViewController {
         arrayExpandSections = [Bool](count: dictionaryActivities.count, repeatedValue: true)
 
         activityIndicator.stopAnimating()
+        
+        if self.refresher.refreshing {
+            self.refresher.endRefreshing()
+        }
         tableView.reloadData()
     }
+    
+    func refresh(){
+        if let contract = detailContract {
+            loadActivities(contract)
+        }
+    }
+    
+    
 }

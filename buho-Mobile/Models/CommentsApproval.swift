@@ -30,14 +30,20 @@ class CommentsApproval: PFObject, PFSubclassing {
         self.ContactId = ContactId
         self.ContractId = contract
         self.MeetingItemId = mItem
-        Approved = false
+        Approved = 0
     }
     
     //atributos:
     @NSManaged var Comment: String
-    @NSManaged var Approved: Bool
+    @NSManaged var Approved: Int
     @NSManaged var ContactId: Contact
     @NSManaged var ContractId: Contract
     @NSManaged var MeetingItemId: MeetingItem
     
+}
+
+enum ApprovedCommentType: Int {
+    case Rechazado = -1
+    case PorAprobar = 0
+    case Aprobado = 1
 }

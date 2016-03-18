@@ -64,14 +64,14 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
     
     
     
-    override func willMoveToParentViewController(parent: UIViewController?) {
-        if parent == nil {
-            // Back btn Event handler
-            pConnection.saveAllInBackground(newComments, completion: { (succeded, error) -> () in
-                //TODO: hacer algo si no se guarda el comentario.
-            })
-        }
-    }
+//    override func willMoveToParentViewController(parent: UIViewController?) {
+//        if parent == nil {
+//            // Back btn Event handler
+//            pConnection.saveAllInBackground(newComments, completion: { (succeded, error) -> () in
+//                //TODO: hacer algo si no se guarda el comentario.
+//            })
+//        }
+//    }
     
 
     // MARK: - Table view data source
@@ -281,7 +281,11 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
         let comentario = checkTimeStamp(growingTextView.text )
         temporalComments.insert(comentario, atIndex: 0) // append(comentario)
         if let actividad = activity{
-            newComments.append(CommentsApproval(Comment: comentario, ContactId: tmpData.contacto!, contract: tmpData.contrato!, mItem: actividad) )
+            let commentApproval = CommentsApproval(Comment: comentario, ContactId: tmpData.contacto!, contract: tmpData.contrato!, mItem: actividad)
+            commentApproval.saveInBackground()
+            
+            newComments.append(commentApproval )
+            
         }
         
         tableView.reloadSections(NSIndexSet(index: 5), withRowAnimation: .Automatic)
