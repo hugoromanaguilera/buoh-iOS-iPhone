@@ -201,10 +201,12 @@ class ActivityViewController: UITableViewController {
                 return
             }
             if succeded {
-                if let compromisos = self.tmpData.compromisos {
-                    self.arrayMeetingItems = compromisos
+                if !self.tmpData.compromisos.isEmpty {
+                    self.arrayMeetingItems = self.tmpData.compromisos
                     self.loadSelfActivities()
+
                 }
+                
             }
         })
     }

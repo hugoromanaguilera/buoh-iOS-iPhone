@@ -118,6 +118,17 @@ extension Array{
         }
         return nil
     }
+    
+    func getIndexForComment(comment: CommentsApproval) -> Int?{
+        var i: Int
+        for i = 0; i < self.count; i += 1 {
+            let object = self[i]
+            if let commentApproval = object as? CommentsApproval {
+                if commentApproval == comment { return i }
+            }
+        }
+        return nil
+    }
 
 //    /****
 //    Obtiene el participante de un arreglo de participantes a partir de un contacto
@@ -308,6 +319,7 @@ extension NSDate {
 
 //MARK: - String
 extension String {
+    
     func convertDateToTimestamp() -> String
     {
         let dateFormatter = NSDateFormatter()
@@ -316,32 +328,73 @@ extension String {
         return timeStamp
 
     }
-    ///pasa un String con formato dd/MM/yyyy a tipo NSDate
-    func stringToDate() ->NSDate?{
-        let formatter = NSDateFormatter()
-        formatter.dateFormat = "dd/MM/yyy"
-        let date: NSDate = formatter.dateFromString(self)!
-        return date
-    }
-    ///pasa un String con formato medium a tipo NSDate
-    func toDate() -> NSDate? {
-        
-        let formatter = NSDateFormatter()
-        formatter.dateStyle = .MediumStyle;
-        formatter.timeStyle = .NoStyle;
-        if let date = formatter.dateFromString(self){
-            return date
+    
+    ///primer carácter en máyuscula
+    func firstCharacterUpperCase() -> String {
+        if !self.isEmpty {
+            let lowercaseString = self.lowercaseString
+            
+            return lowercaseString.stringByReplacingCharactersInRange(lowercaseString.startIndex...lowercaseString.startIndex, withString: String(lowercaseString[lowercaseString.startIndex]).uppercaseString)
         }else{
-            return nil
+            return ""
+        }
+        
+    }
+    
+    ///obtiene la fecha de un string que comienza con el formato "yyyy-MM-dd HH:mm:ss"
+    func getDateFromString() -> String? {
+        if self.characters.count <= 18 {
+            return NSDate().dateToString()! as String
+        }
+        else{
+            let indexRange = self.startIndex.advancedBy(19)
+            let subcomment = self.substringToIndex(indexRange)
+            
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            
+            //2) se realiza la comprobación de fecha en el comentario:
+            if dateFormatter.dateFromString(subcomment) == nil {
+                return NSDate().dateToString()! as String
+                //            newComment = convertDateToTimestamp(NSDate() ) + comment
+            }
+            else{
+                let date = dateFormatter.dateFromString(subcomment)!
+                if let dateString = date.dateToString() as? String {
+                    return dateString
+                }else{
+                    return NSDate().dateToString()! as String
+                }
+            }
         }
     }
     
-    ///pasa un String con formato HH:mm:ss a tipo NSDate
-    func stringHourToDate() -> NSDate?{
-        let formatter = NSDateFormatter()
-        formatter.dateFormat = "HH:mm"
-        let date : NSDate = formatter.dateFromString(self)!
-        return date
+    func getStringWithoutDate() -> String? {
+        if self.characters.count <= 18 {
+            return self
+        }
+        else{
+            let indexRange = self.startIndex.advancedBy(19)
+            let subcomment = self.substringToIndex(indexRange)
+            
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            
+            //2) se realiza la comprobación de fecha en el comentario:
+            if dateFormatter.dateFromString(subcomment) == nil {
+                return self
+                //            newComment = convertDateToTimestamp(NSDate() ) + comment
+            }
+            else{
+                let date = dateFormatter.dateFromString(subcomment)!
+                if let _ = date.dateToString() as? String {
+                    let index = self.startIndex.advancedBy(22)
+                    return self.substringFromIndex( index )
+                }else{
+                    return self
+                }
+            }
+        }
     }
     
     var isEmail: Bool {
@@ -360,17 +413,36 @@ extension String {
         return  self == filtered
         
     }
-    ///primer carácter en máyuscula
-    func firstCharacterUpperCase() -> String {
-        if !self.isEmpty {
-            let lowercaseString = self.lowercaseString
-            
-            return lowercaseString.stringByReplacingCharactersInRange(lowercaseString.startIndex...lowercaseString.startIndex, withString: String(lowercaseString[lowercaseString.startIndex]).uppercaseString)
-        }else{
-            return ""
-        }
-        
+    
+    ///pasa un String con formato dd/MM/yyyy a tipo NSDate
+    func stringToDate() ->NSDate?{
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "dd/MM/yyy"
+        let date: NSDate = formatter.dateFromString(self)!
+        return date
     }
+    
+    ///pasa un String con formato HH:mm:ss a tipo NSDate
+    func stringHourToDate() -> NSDate?{
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "HH:mm"
+        let date : NSDate = formatter.dateFromString(self)!
+        return date
+    }
+    
+    ///pasa un String con formato medium a tipo NSDate
+    func toDate() -> NSDate? {
+        
+        let formatter = NSDateFormatter()
+        formatter.dateStyle = .MediumStyle;
+        formatter.timeStyle = .NoStyle;
+        if let date = formatter.dateFromString(self){
+            return date
+        }else{
+            return nil
+        }
+    }
+    
 }
 
 //MARK: - UIColor

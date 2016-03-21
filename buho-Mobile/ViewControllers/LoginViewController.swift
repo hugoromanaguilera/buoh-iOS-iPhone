@@ -38,15 +38,6 @@ class LoginViewController: UIViewController{
         
         activityIndicator.hidesWhenStopped = true
     }
-//    
-//    override func viewWillAppear(animated: Bool) {
-//        registerForKeyboardNotifications()
-//    }
-//    
-//    override func viewWillDisappear(animated: Bool) {
-//        deregisterFromKeyboardNotifications()
-//    }
-    
 
     //MARK: - funciones
     @IBAction func loginAction(sender: AnyObject) {
@@ -152,20 +143,6 @@ extension LoginViewController: UITextFieldDelegate {
         view.subviews.first?.endEditing(true)
     }
     
-//    func registerForKeyboardNotifications()
-//    {
-//        //Adding notifies on keyboard appearing
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWasShown:", name: UIKeyboardWillShowNotification, object: nil)
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
-//    }
-//    
-//    func deregisterFromKeyboardNotifications()
-//    {
-//        //Removing notifies on keyboard appearing
-//        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-//        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
-//    }
-    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField.isEqual(userTextField){
             passTextField.becomeFirstResponder()
@@ -177,38 +154,4 @@ extension LoginViewController: UITextFieldDelegate {
         return true
     }
     
-//    func textFieldDidBeginEditing(textField: UITextField)
-//    {
-//        activeField = textField
-//    }
-//    
-//    func textFieldDidEndEditing(textField: UITextField)
-//    {
-//        activeField = nil
-//    }
-//    
-//    func keyboardWasShown(aNotification:NSNotification) {
-//        let info = aNotification.userInfo
-//        let infoNSValue = info![UIKeyboardFrameBeginUserInfoKey] as! NSValue
-//        let kbSize = infoNSValue.CGRectValue().size
-//        
-//        let textf = activeField?.frame.origin
-//        let textheight = activeField?.frame.size.height
-//        var visibleRect = view.frame
-//        
-//        visibleRect.size.height -= kbSize.height
-//        
-//        if !CGRectContainsPoint(visibleRect, textf!){ //
-//            let scrollPoint = CGPointMake(0.0, textf!.y - visibleRect.size.height + textheight!)
-//            myScroll.setContentOffset(scrollPoint, animated: true)
-//        }
-//        
-//    }
-//    
-//    func keyboardWillBeHidden(notification: NSNotification){
-//        myScroll.setContentOffset(CGPointZero, animated: true)
-//    }
-    
-    
 }
-

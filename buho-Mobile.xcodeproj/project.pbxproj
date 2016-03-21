@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0492503C90307DBF154F730A /* Pods_buho_Mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287969D342CB97B8F3949A09 /* Pods_buho_Mobile.framework */; };
+		9301B0F61CA03C8400D3C7C4 /* CommentViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9301B0F51CA03C8400D3C7C4 /* CommentViewCell.swift */; };
 		930DC5001C96F96C00CD6722 /* TemporalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930DC4FF1C96F96C00CD6722 /* TemporalData.swift */; };
 		930DC5021C97362700CD6722 /* DueDateViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930DC5011C97362700CD6722 /* DueDateViewCell.swift */; };
 		931862731C9098890075780D /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931862721C9098890075780D /* ActivityViewController.swift */; };
@@ -52,6 +53,7 @@
 /* Begin PBXFileReference section */
 		287969D342CB97B8F3949A09 /* Pods_buho_Mobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_buho_Mobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		451DD7CEB2A7BCC57F2BB501 /* Pods-buho-Mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-buho-Mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-buho-Mobile/Pods-buho-Mobile.debug.xcconfig"; sourceTree = "<group>"; };
+		9301B0F51CA03C8400D3C7C4 /* CommentViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentViewCell.swift; path = ViewControllers/TableViewCell/CommentViewCell.swift; sourceTree = "<group>"; };
 		930DC4FF1C96F96C00CD6722 /* TemporalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TemporalData.swift; path = Frames/TemporalData.swift; sourceTree = "<group>"; };
 		930DC5011C97362700CD6722 /* DueDateViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DueDateViewCell.swift; path = ViewControllers/TableViewCell/DueDateViewCell.swift; sourceTree = "<group>"; };
 		931862721C9098890075780D /* ActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityViewController.swift; path = ViewControllers/ActivityViewController.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 			children = (
 				931862751C90995E0075780D /* ActivityViewCell.swift */,
 				930DC5011C97362700CD6722 /* DueDateViewCell.swift */,
+				9301B0F51CA03C8400D3C7C4 /* CommentViewCell.swift */,
 			);
 			name = TableViewCell;
 			sourceTree = "<group>";
@@ -369,6 +372,7 @@
 				9369F5371C8756F300EFC88D /* buho_Mobile.xcdatamodeld in Sources */,
 				93C7FEB11C8D4B6500926DB3 /* CustomButton.swift in Sources */,
 				93DABB121C8DF70100164B1F /* ParseConnection.swift in Sources */,
+				9301B0F61CA03C8400D3C7C4 /* CommentViewCell.swift in Sources */,
 				9399560A1C90A91F007AAB41 /* Responsibility.swift in Sources */,
 				93DABB101C8DF6C200164B1F /* NetworkConnection.swift in Sources */,
 				93DABB321C8DF99E00164B1F /* Code.swift in Sources */,

@@ -24,6 +24,10 @@ class CommentsApproval: PFObject, PFSubclassing {
         return "CommentsApproval"
     }
     
+    override init(){
+        super.init()
+    }
+    
     init(Comment: String, ContactId: Contact, contract: Contract, mItem: MeetingItem) {
         super.init()
         self.Comment = Comment
@@ -31,6 +35,15 @@ class CommentsApproval: PFObject, PFSubclassing {
         self.ContractId = contract
         self.MeetingItemId = mItem
         Approved = 0
+    }
+    
+    init(Comment: String, ContactId: Contact, contract: Contract, mItem: MeetingItem, Approved: Int) {
+        super.init()
+        self.Comment = Comment
+        self.ContactId = ContactId
+        self.ContractId = contract
+        self.MeetingItemId = mItem
+        self.Approved = Approved
     }
     
     //atributos:

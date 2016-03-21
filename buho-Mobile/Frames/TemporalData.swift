@@ -10,7 +10,8 @@ import Foundation
 
 class TemporalData {
     
-    private var _compromisos: [MeetingItem]?
+    private var _comentariosAprobados: [CommentsApproval]
+    private var _compromisos: [MeetingItem]
     private var _actividad: MeetingItem? = nil
     private var _contacto: Contact? = nil
     private var _contrato: Contract? = nil
@@ -26,9 +27,18 @@ class TemporalData {
     
     init(){
         _compromisos = []
+        _comentariosAprobados = []
     }
     
-    var compromisos: [MeetingItem]? {
+    var comentariosAprobados: [CommentsApproval] {
+        get {
+            return _comentariosAprobados
+        }
+        set {
+            _comentariosAprobados = newValue
+        }
+    }
+    var compromisos: [MeetingItem] {
         get{
             return _compromisos
         }

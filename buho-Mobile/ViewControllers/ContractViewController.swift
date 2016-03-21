@@ -14,6 +14,8 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
     //MARK: - Variables
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    private var refresher: UIRefreshControl!
+    
     var arrayCompanies : [String] = [] //para titulos de sección
     var arrayContracts: [Contract] = []
     var dictionaryContracts : [ String : [Contract] ] = [:]
@@ -33,6 +35,11 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
         super.viewDidLoad()
         activityIndicator.hidesWhenStopped = true
         
+        refresher = UIRefreshControl()
+        refresher.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        
+        tableView.addSubview(refresher)
+        
         CommonHelpers.setTableViewColor(tableView)
         definesPresentationContext = true
         
@@ -51,8 +58,10 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
         /*Fin de Config searchBar */
         
         //        tableView.reloadData()
+        if let contact = contact {
+            loadContracts(contact)
+        }
         
-        loadContracts(contact!)
         
         // Uncomment the following line to preserve selection between presentations
         clearsSelectionOnViewWillAppear = false
@@ -135,6 +144,9 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     func loadContracts(contact : Contact){
+        if !refresher.refreshing {
+            activityIndicator.startAnimating()
+        }
         self.arrayCompanies.removeAll()
         self.arrayContracts.removeAll()
         self.dictionaryContracts.removeAll()
@@ -161,6 +173,10 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
             
             dispatch_async(dispatch_get_main_queue()) {
                 self.activityIndicator.stopAnimating()
+                
+                if self.refresher.refreshing {
+                    self.refresher.endRefreshing()
+                }
                 self.tableView.reloadData()
 //                
 //                //para seleccionar la primera fila por default
@@ -194,6 +210,12 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
             }
         }
         self.tableView.reloadData()
+    }
+    
+    func refresh(){
+        if let contact = contact {
+            loadContracts(contact)
+        }
     }
     
 //    // MARK: - Segue

@@ -18,10 +18,13 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
     @IBOutlet weak var growingTextView: NextGrowingTextView!
     @IBOutlet weak var addCommentButton: UIButton!
     
+    private var refresher: UIRefreshControl!
+    
     private let placeholder = "Ingrese un nuevo comentario..."
     
-    private var temporalComments: [String] = []
-    private var newComments: [CommentsApproval] = []
+
+    private var temporalCommentsApproval: [CommentsApproval] = []
+    private var commentsFromParse: [CommentsApproval] = []
 
     var tmpData: TemporalData = TemporalData.sharedInstance
     var pConnection: ParseConnection = ParseConnection.sharedInstance
@@ -39,11 +42,13 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
         
         addCommentButton.enabled = false
         
-        temporalComments.removeAll()
-        newComments.removeAll()
+        refresher = UIRefreshControl()
+        refresher.addTarget(self, action: "refresh", forControlEvents: .ValueChanged)
+        
+        tableView.addSubview(refresher)
+        
         
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.startAnimating()
         loadActivity()
         
         //Para el textView inferior...
@@ -61,18 +66,6 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
         removeNotifications()
 
     }
-    
-    
-    
-//    override func willMoveToParentViewController(parent: UIViewController?) {
-//        if parent == nil {
-//            // Back btn Event handler
-//            pConnection.saveAllInBackground(newComments, completion: { (succeded, error) -> () in
-//                //TODO: hacer algo si no se guarda el comentario.
-//            })
-//        }
-//    }
-    
 
     // MARK: - Table view data source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -82,7 +75,6 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
             return 1
         }
     }
-    
 
     // Override to support conditional editing of the table view.
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -97,10 +89,7 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // Delete the row from the data source
-            let commentForDelete = temporalComments.removeAtIndex(indexPath.row)
-            if let index = newComments.getIndexForComment(commentForDelete) {
-                newComments.removeAtIndex(index)
-            }
+            temporalCommentsApproval.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
     }
@@ -108,8 +97,9 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cellID = "cellDetailActivity"
         let cellDueDate = "cellDueDateActivity"
+        let cellComment = "cellComment"
         let cell = tableView.dequeueReusableCellWithIdentifier(cellID)!
-        
+
         switch indexPath.section {
         case 0:
             cell.textLabel?.text = activity?.Detail
@@ -134,8 +124,19 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
             }
             
         case 5:
-            let comments = temporalComments
-            cell.textLabel?.text = comments[indexPath.row]
+            let cellComment = tableView.dequeueReusableCellWithIdentifier(cellComment) as! CommentViewCell
+            let comments = temporalCommentsApproval
+            cellComment.dateLabel.text = comments[indexPath.row].Comment.getDateFromString()
+            cellComment.commentLabel.text = comments[indexPath.row].Comment.getStringWithoutDate()!
+            
+            if comments[indexPath.row].Approved == 0 {
+                cellComment.labelApproved.hidden = false
+            }else {
+                cellComment.labelApproved.hidden = true
+            }
+            
+            
+            return cellComment
         default:
             cell.textLabel!.text = "No se obtuvo información."
         }
@@ -149,7 +150,7 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
         case 4:
             return (activity?.Responsibilities.count)!
         case 5:
-            return temporalComments.count
+            return temporalCommentsApproval.count
         default:
             return 1
         }
@@ -187,6 +188,9 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
 
     //MARK: - Funciones
     func loadActivity(){
+        if !self.refresher.refreshing {
+            activityIndicator.startAnimating()
+        }
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0)) {
             if let actividad = self.tmpData.actividad {
                 var available: Bool = false
@@ -204,24 +208,79 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
                 
                 if !available {
                     actividad.fetchContacts()
-                    self.setActivity()
+                    self.setActivity(actividad)
                 }else{
-                    self.setActivity()
+                    self.setActivity(actividad)
+                }
+                
+            }else{
+                dispatch_async(dispatch_get_main_queue() ) {
+                    let alertView = UIAlertController(title: "Hubo un error al cargar la actividad.", message: "Intente de nuevo por favor.", preferredStyle: .Alert)
+                    alertView.view.tintColor = UIColor(red: 142/255, green: 68/255, blue: 173/255, alpha: 1)
+                    
+                    let aceptar = UIAlertAction(title: "Acpetar", style: .Default, handler: { (action: UIAlertAction) -> Void in
+                        self.navigationController?.popViewControllerAnimated(true)
+                    })
+                    alertView.addAction(aceptar)
+                    
+                    self.presentViewController(alertView, animated: true, completion: nil)
                 }
             }
         }
     }
     
-    func setActivity(){
-        self.activity = self.tmpData.actividad
-        self.temporalComments = self.activity!.Comments
-        self.temporalComments.sortInPlace({ (c1: String, c2: String) -> Bool in
-            timeStampOfString(c1).isGreaterThanDate(timeStampOfString(c2))
+    func setActivity(actividad: MeetingItem){
+        
+        activity = actividad
+        temporalCommentsApproval.removeAll(keepCapacity: false)
+        commentsFromParse.removeAll(keepCapacity: false)
+        
+        pConnection.getCommentsApproval(actividad, completion: { (succeded, error, comments) -> () in
+            
+            if succeded {
+                if comments!.count > 0 {
+                    self.commentsFromParse = comments!
+                }
+            }
+            
+            for com in actividad.Comments {
+                let commentApproval = CommentsApproval(Comment: com, ContactId: self.tmpData.contacto!, contract: self.tmpData.contrato!, mItem: actividad, Approved: 1)
+                self.temporalCommentsApproval.append(commentApproval)
+            }
+            
+            dispatch_async(dispatch_get_main_queue() ) {
+            
+                self.temporalCommentsApproval += self.commentsFromParse
+                
+                self.temporalCommentsApproval.sortInPlace({ (c1: CommentsApproval, c2: CommentsApproval) -> Bool in
+                    timeStampOfString(c1.Comment).isGreaterThanDate(timeStampOfString(c2.Comment))
+                })
+            
+            
+                self.reloadTable()
+            }
+            
+            
         })
-        self.isDataAvailable = true
+        
+    }
+    
+    func reloadTable(){
+        isDataAvailable = true
         dispatch_async(dispatch_get_main_queue() ) {
             self.activityIndicator.stopAnimating()
+            
+            if self.refresher.refreshing {
+                self.refresher.endRefreshing()
+            }
+            
             self.tableView.reloadData()
+        }
+    }
+    
+    func refresh(){
+        if activity  != nil {
+            loadActivity()
         }
     }
     
@@ -252,8 +311,13 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
     func setTextView(){
 
         self.growingTextView.layer.cornerRadius = 4
-        self.growingTextView.backgroundColor = UIColor(white: 0.9, alpha: 1)
-        self.growingTextView.placeholderAttributedText = NSAttributedString(string: placeholder)
+        let attributes = [
+            NSStrokeColorAttributeName : UIColor.grayColor(),
+            NSForegroundColorAttributeName: UIColor.grayColor(),
+            NSStrokeWidthAttributeName : -3.0
+        ]
+        
+        growingTextView.placeholderAttributedText = NSAttributedString(string: self.placeholder, attributes: attributes)
         
         //Delegates:
         growingTextView.delegates.textViewDidEndEditing = {
@@ -261,7 +325,7 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
             // Do something
             self.addCommentButton.enabled = false
             self.growingTextView.text = ""
-            self.growingTextView.placeholderAttributedText = NSAttributedString(string: self.placeholder)
+            growingTextView.placeholderAttributedText = NSAttributedString(string: self.placeholder, attributes: attributes)
         }
         
         growingTextView.delegates.shouldChangeTextInRange = { (range: NSRange, replacementText: String) -> Bool in
@@ -278,18 +342,23 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     @IBAction func handleSendButton(sender: AnyObject) {
-        let comentario = checkTimeStamp(growingTextView.text )
-        temporalComments.insert(comentario, atIndex: 0) // append(comentario)
+         // append(comentario)
         if let actividad = activity{
-            let commentApproval = CommentsApproval(Comment: comentario, ContactId: tmpData.contacto!, contract: tmpData.contrato!, mItem: actividad)
-            commentApproval.saveInBackground()
+            let comentario = checkTimeStamp(growingTextView.text )
             
-            newComments.append(commentApproval )
+            let commentApproval = CommentsApproval(Comment: comentario, ContactId: tmpData.contacto!, contract: tmpData.contrato!, mItem: actividad)
+            
+            temporalCommentsApproval.insert(commentApproval,atIndex:  0)
+            commentApproval.saveInBackground()
+
+            
+            let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+            tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+            
+            tableView.reloadSections(NSIndexSet(index: 5), withRowAnimation: .Automatic)
             
         }
         
-        tableView.reloadSections(NSIndexSet(index: 5), withRowAnimation: .Automatic)
-
         self.growingTextView.resignFirstResponder()
     }
     

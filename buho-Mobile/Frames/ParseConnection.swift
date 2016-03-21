@@ -332,6 +332,30 @@ class ParseConnection {
         }
         
     }
+    
+    func getCommentsApproval(meetingItem: MeetingItem, completion: (succeded: Bool, error: NSError?, comments: [CommentsApproval]?) -> () ) {
+        
+        let query = CommentsApproval.query()!
+        query.whereKey("MeetingItemId", equalTo: meetingItem)
+        query.whereKey("Approved", equalTo: 0)
+        query.includeKey("ContactId")
+        query.limit = 500
+        query.findObjectsInBackgroundWithBlock { (object: [PFObject]?, error: NSError?) -> Void in
+            guard error == nil else {
+                completion(succeded: false, error: error, comments: nil)
+                return
+            }
+            guard object != nil else {
+                completion(succeded: false, error: nil, comments: nil)
+                return
+            }
+            if let comments = object as? [CommentsApproval] {
+                completion(succeded: true, error: nil, comments: comments)
+            }
+        }
+        
+        
+    }
 
     
 }
