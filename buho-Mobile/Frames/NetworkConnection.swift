@@ -9,6 +9,8 @@
 import Foundation
 class NetworkConnection : NSObject {
     
+    private let url = "http://minutas.solu4b.com/contactos-svc/directory.svc/authInfo"
+    
     // singleton
     class var sharedInstance : NetworkConnection {
         struct Static {
@@ -27,7 +29,7 @@ class NetworkConnection : NSObject {
      - postCompleted: es el callback.
      - returns: en el callback, se returna true si es que pertenece al AD, además de los datos del contacto. En caso contrario, retorna false, sin los datos del contacto.
      */
-    func postForContact(params : Dictionary<String, String>, url : String,
+    func postForContact(params : Dictionary<String, String>,
         postCompleted : (succeded: Bool, msg: String, error: NSError?, contactDictionary : [String : String]) -> ()){
             
             var contact : [String : String] = [:]

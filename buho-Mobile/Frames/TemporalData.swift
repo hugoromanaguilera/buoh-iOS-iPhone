@@ -15,6 +15,8 @@ class TemporalData {
     private var _actividad: MeetingItem? = nil
     private var _contacto: Contact? = nil
     private var _contrato: Contract? = nil
+    private var _contratos: [Contract]
+    private var _dicContratos: [String: [Contract] ]
     
     // singleton
     class var sharedInstance : TemporalData {
@@ -28,6 +30,8 @@ class TemporalData {
     init(){
         _compromisos = []
         _comentariosAprobados = []
+        _contratos = []
+        _dicContratos = [:]
     }
     
     var comentariosAprobados: [CommentsApproval] {
@@ -43,6 +47,7 @@ class TemporalData {
             return _compromisos
         }
         set(newCompromisos){
+            _compromisos.removeAll(keepCapacity: false)
             _compromisos = newCompromisos
         }
     }
@@ -71,6 +76,26 @@ class TemporalData {
         }
         set{
            _contrato = newValue
+        }
+    }
+    
+    var contratos: [Contract] {
+        get {
+            return _contratos
+        }
+        set {
+            _contratos.removeAll(keepCapacity: false)
+            _contratos = newValue
+        }
+    }
+    
+    var dicContratos: [String: [Contract] ] {
+        get {
+            return _dicContratos
+        }
+        set {
+            _dicContratos.removeAll(keepCapacity: false)
+            _dicContratos = newValue
         }
     }
     

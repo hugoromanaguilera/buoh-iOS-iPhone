@@ -15,15 +15,17 @@ class LoginViewController: UIViewController{
     @IBOutlet private weak var passTextField: UITextField!
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     
-    private let url = "http://minutas.solu4b.com/contactos-svc/directory.svc/authInfo"
-    
     var activeField: UITextField?
     
-    var contact : Contact?
-    var networkConnection : NetworkConnection = NetworkConnection.sharedInstance
-    var parseConnection : ParseConnection = ParseConnection.sharedInstance
-    var persistedSettings : PersistedSettings = PersistedSettings.sharedInstance
-    var tmpData: TemporalData = TemporalData.sharedInstance
+    private var networkConnection : NetworkConnection = NetworkConnection.sharedInstance
+    private var parseConnection : ParseConnection = ParseConnection.sharedInstance
+    private var persistedSettings : PersistedSettings = PersistedSettings.sharedInstance
+    private var tmpData: TemporalData = TemporalData.sharedInstance
+    
+    var contact : Contact? {
+        return tmpData.contacto
+    }
+    
     
     //MARK: - Life cycle:
     override func viewDidLoad() {
@@ -56,8 +58,17 @@ class LoginViewController: UIViewController{
         
         activityIndicator.startAnimating()
         
-        networkConnection.postForContact(userAndPass, url: self.url, postCompleted: {
+        networkConnection.postForContact(userAndPass, postCompleted: {
             (succeded, msg, error, contactDictionary) -> () in
+            
+            guard error == nil else {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    // Show the alert
+                    CommonHelpers.presentOneAlertController(self, alertTitle: "Error en login. 😕", alertMessage: msg, myActionTitle: "OK", myActionStyle: .Default)
+                    self.activityIndicator.stopAnimating()
+                })
+                return
+            }
             
             //1)valida si está en el AD.
             if succeded {
@@ -75,7 +86,6 @@ class LoginViewController: UIViewController{
                     }
                     
                     self.tmpData.contacto = contact
-                    self.contact = contact
                     
                     //3) Si se encuentra el contact, entonces entrará a la aplicación.
                     dispatch_async(dispatch_get_main_queue()) {
@@ -100,9 +110,7 @@ class LoginViewController: UIViewController{
                             cont.fetchIfNeededInBackground()
                         }
                         self.tmpData.contacto = cont
-                        self.contact = cont
                     }
-                    
                     
                     //3) Si se encuentra el contact, entonces entrará a la aplicación.
                     dispatch_async(dispatch_get_main_queue()) {
@@ -111,15 +119,6 @@ class LoginViewController: UIViewController{
                     }
 
                 })
-            }
-            
-            guard error == nil else {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    // Show the alert
-                    CommonHelpers.presentOneAlertController(self, alertTitle: "Error en login. 😕", alertMessage: msg, myActionTitle: "OK", myActionStyle: .Default)
-                    self.activityIndicator.stopAnimating()
-                })
-                return
             }
 
         })
@@ -130,7 +129,7 @@ class LoginViewController: UIViewController{
         if let destino = segue.destinationViewController as? UISplitViewController{
             let nav = destino.viewControllers.first as? UINavigationController
             if let master = nav?.viewControllers.first as? ContractViewController{
-                master.contact = self.contact
+                master.contact = contact
             }
         }
     }

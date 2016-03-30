@@ -16,11 +16,16 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
     
     private var refresher: UIRefreshControl!
     
+    private var parseConnection : ParseConnection = ParseConnection.sharedInstance
+    private var tmpData: TemporalData = TemporalData.sharedInstance
+
     var arrayCompanies : [String] = [] //para titulos de sección
-    var arrayContracts: [Contract] = []
-    var dictionaryContracts : [ String : [Contract] ] = [:]
-    var parseConnection : ParseConnection = ParseConnection.sharedInstance
-    var tmpData: TemporalData = TemporalData.sharedInstance
+    var arrayContracts: [Contract] {
+        return tmpData.contratos
+    }
+    var dictionaryContracts : [ String : [Contract] ] {
+        return tmpData.dicContratos
+    }
     
     var arrayFilteredContracts = [Contract]()
     var resultSearchController : UISearchController!// = UISearchController()
@@ -53,7 +58,7 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
 //        resultSearchController.view.tintColor = UIColor(red: 0x8E, green: 0x44, blue: 0xAD, claro: false)
         
         
-        tableView.tableHeaderView = self.resultSearchController.searchBar
+        tableView.tableHeaderView = resultSearchController.searchBar
         
         /*Fin de Config searchBar */
         
@@ -147,9 +152,7 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
         if !refresher.refreshing {
             activityIndicator.startAnimating()
         }
-        self.arrayCompanies.removeAll()
-        self.arrayContracts.removeAll()
-        self.dictionaryContracts.removeAll()
+        
         
         parseConnection.getContractsForContact(contact) { (succeded, error, data) -> () in
             guard error == nil else {
@@ -167,13 +170,19 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
                 return
             }
             
-            self.arrayCompanies = data!["companies"] as! [String]
-            self.arrayContracts = data!["contracts"] as! [Contract]
-            self.dictionaryContracts = data!["dictionary"] as! NSDictionary as! [String : [Contract]]
+            self.tmpData.contratos = data!["contracts"] as! [Contract]
+            self.tmpData.dicContratos = data!["dictionary"] as! NSDictionary as! [String: [Contract] ]
+            self.arrayCompanies.removeAll()
+            self.arrayCompanies = [String](self.tmpData.dicContratos.keys)
+            self.arrayCompanies.sortInPlace({ $0 < $1 })
+            
+//            self.arrayCompanies = data!["companies"] as! [String]
+//            self.arrayContracts = data!["contracts"] as! [Contract]
+//            self.dictionaryContracts = data!["dictionary"] as! NSDictionary as! [String : [Contract]]
             
             dispatch_async(dispatch_get_main_queue()) {
                 self.activityIndicator.stopAnimating()
-                
+
                 if self.refresher.refreshing {
                     self.refresher.endRefreshing()
                 }

@@ -38,7 +38,6 @@
 		93DABB231C8DF8B500164B1F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DABB221C8DF8B500164B1F /* AudioToolbox.framework */; };
 		93DABB251C8DF8BD00164B1F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DABB241C8DF8BD00164B1F /* CoreLocation.framework */; };
 		93DABB271C8DF8C400164B1F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DABB261C8DF8C400164B1F /* QuartzCore.framework */; };
-		93DABB291C8DF8CE00164B1F /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DABB281C8DF8CE00164B1F /* StoreKit.framework */; };
 		93DABB2B1C8DF8D900164B1F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DABB2A1C8DF8D900164B1F /* SystemConfiguration.framework */; };
 		93DABB2E1C8DF94E00164B1F /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93DABB2D1C8DF94E00164B1F /* Contact.swift */; };
 		93DABB301C8DF97B00164B1F /* Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93DABB2F1C8DF97B00164B1F /* Contract.swift */; };
@@ -85,7 +84,6 @@
 		93DABB221C8DF8B500164B1F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		93DABB241C8DF8BD00164B1F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		93DABB261C8DF8C400164B1F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		93DABB281C8DF8CE00164B1F /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		93DABB2A1C8DF8D900164B1F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		93DABB2D1C8DF94E00164B1F /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Contact.swift; path = Models/Contact.swift; sourceTree = "<group>"; };
 		93DABB2F1C8DF97B00164B1F /* Contract.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Contract.swift; path = Models/Contract.swift; sourceTree = "<group>"; };
@@ -104,7 +102,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				93DABB2B1C8DF8D900164B1F /* SystemConfiguration.framework in Frameworks */,
-				93DABB291C8DF8CE00164B1F /* StoreKit.framework in Frameworks */,
 				93DABB271C8DF8C400164B1F /* QuartzCore.framework in Frameworks */,
 				93DABB251C8DF8BD00164B1F /* CoreLocation.framework in Frameworks */,
 				93DABB231C8DF8B500164B1F /* AudioToolbox.framework in Frameworks */,
@@ -207,7 +204,6 @@
 			children = (
 				93DABB221C8DF8B500164B1F /* AudioToolbox.framework */,
 				93DABB2A1C8DF8D900164B1F /* SystemConfiguration.framework */,
-				93DABB281C8DF8CE00164B1F /* StoreKit.framework */,
 				93DABB261C8DF8C400164B1F /* QuartzCore.framework */,
 				93DABB241C8DF8BD00164B1F /* CoreLocation.framework */,
 				93DABB201C8DF8AE00164B1F /* CFNetwork.framework */,
@@ -280,6 +276,12 @@
 				TargetAttributes = {
 					9369F52A1C8756F300EFC88D = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 9V8CXR6T23;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -504,6 +506,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/buho-Mobile",
@@ -512,6 +515,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.solu4b.prueba.buho-Mobile";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -522,6 +526,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/buho-Mobile",
@@ -530,6 +535,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.solu4b.prueba.buho-Mobile";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

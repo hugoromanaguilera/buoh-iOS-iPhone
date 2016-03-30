@@ -29,7 +29,9 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
     var tmpData: TemporalData = TemporalData.sharedInstance
     var pConnection: ParseConnection = ParseConnection.sharedInstance
     
-    private var activity: MeetingItem?
+    private var activity: MeetingItem? {
+        return tmpData.actividad
+    }
     var isDataAvailable = false
 
     //MARK: - Life Cycle
@@ -119,7 +121,7 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
         case 4:
             let responsibilities = activity?.Responsibilities
             let responsibility = responsibilities![indexPath.row]
-            if (responsibility.ContactId != nil) && (responsibility.RolTarea != nil) {
+            if ((responsibility.ContactId!.dataAvailable) && (responsibility.RolTarea!.dataAvailable)) {
                 cell.textLabel!.text = "\(responsibility.ContactId!.Name)  \(responsibility.ContactId!.LastName) (\(responsibility.RolTarea!.Name))"
             }
             
@@ -192,7 +194,7 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
             activityIndicator.startAnimating()
         }
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0)) {
-            if let actividad = self.tmpData.actividad {
+            if let actividad = self.activity {
                 var available: Bool = false
                 for responsibility in actividad.Responsibilities {
                     if let contact = responsibility.ContactId,
@@ -230,8 +232,7 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func setActivity(actividad: MeetingItem){
-        
-        activity = actividad
+
         temporalCommentsApproval.removeAll(keepCapacity: false)
         commentsFromParse.removeAll(keepCapacity: false)
         
@@ -259,7 +260,6 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
             
                 self.reloadTable()
             }
-            
             
         })
         

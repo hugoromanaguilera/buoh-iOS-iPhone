@@ -23,24 +23,27 @@ class ActivityViewController: UITableViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var filterButton: UIBarButtonItem!
     
+    private var pConnection: ParseConnection = ParseConnection.sharedInstance
+    private var tmpData: TemporalData = TemporalData.sharedInstance
+    
     internal var detailContact: Contact?
     internal var detailContract: Contract?
-    var tmpData: TemporalData = TemporalData.sharedInstance
-    private var pConnection: ParseConnection = ParseConnection.sharedInstance
-    
-    
+
     var delegate : DateMeetingVCDelegate?
     
     private var sectionTitleArray : [String] = []
     private var arrayExpandSections : [Bool]!
     
-    var arrayMeetingItems: [MeetingItem] = []
+    var arrayMeetingItems: [MeetingItem] {
+        return tmpData.compromisos
+    }
     var arraySelfActivities: [MeetingItem] = []
     var dictionaryActivities: [String: [MeetingItem] ] = [:]
     var dictionarySelfActivities: [String: [MeetingItem] ] = [:]
     var arrayDateActivities: [String] = []
     var arrayDateSelfActivities: [String] = []
     var isSelf: Bool = false
+    
     
     //MARK: - Lyfe cycle
     override func viewDidLoad() {
@@ -62,14 +65,15 @@ class ActivityViewController: UITableViewController {
     // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if isSelf{
+//            return isNoData(arrayDateSelfActivities)
             return arrayDateSelfActivities.count
         }else{
+//            return isNoData(arrayDateActivities)
             return arrayDateActivities.count
         }
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-        
         
         let cell = self.tableView.dequeueReusableCellWithIdentifier(kCellActivity) as! ActivityViewCell
         
@@ -196,18 +200,26 @@ class ActivityViewController: UITableViewController {
             activityIndicator.startAnimating()
         }
         pConnection.getActivitiesForContract(contract, completionHandler: { (succeded, error, data) -> () in
-            guard error == nil else {
+            guard (error == nil) && (succeded == true) else {
                 self.activityIndicator.stopAnimating()
+                if !succeded {
+                    print("no se encontraron actividades")
+                }else {
+                    print("error al obtener las actividades")
+                }
                 return
             }
-            if succeded {
-                if !self.tmpData.compromisos.isEmpty {
-                    self.arrayMeetingItems = self.tmpData.compromisos
-                    self.loadSelfActivities()
-
-                }
-                
-            }
+            
+            self.tmpData.compromisos = data!
+            self.loadSelfActivities()
+//            if !self.tmpData.compromisos.isEmpty {
+//                self.arrayMeetingItems = self.tmpData.compromisos
+//                self.loadSelfActivities()
+//            }else{
+//                self.tmpData.compromisos = data!
+//                self.arrayMeetingItems = self.tmpData.compromisos
+//                self.loadSelfActivities()
+//            }
         })
     }
 
@@ -232,7 +244,7 @@ class ActivityViewController: UITableViewController {
             }
         }
         
-        arrayMeetingItems.sortInPlace({   $0.DueDate.isLessThanDate($1.DueDate) })
+        tmpData.compromisos.sortInPlace({   $0.DueDate.isLessThanDate($1.DueDate) })
         
         arraySelfActivities.sortInPlace({   $0.DueDate.isLessThanDate($1.DueDate) })
         
@@ -280,6 +292,5 @@ class ActivityViewController: UITableViewController {
             loadActivities(contract)
         }
     }
-    
     
 }

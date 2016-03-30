@@ -171,9 +171,9 @@ class ParseConnection {
     }
     
     ///obtiene todos los compromisos del contrato.
-    func getActivitiesForContract(contract: Contract, completionHandler: (succeded: Bool, error: NSError?, data: NSDictionary?) -> ()){
+    func getActivitiesForContract(contract: Contract, completionHandler: (succeded: Bool, error: NSError?, data: [MeetingItem]?) -> ()){
         
-        var data: [String: [MeetingItem] ] = [:]
+        var data: [MeetingItem] = []
         
         let estado = arrayCodes.getCodeByName("En Ejecución")
         let tipo = arrayCodes.getCodeByName("Compromisos")
@@ -189,14 +189,19 @@ class ParseConnection {
                 return
             }
             if var activities = objects as? [MeetingItem]{
-                activities.sortInPlace({
-                    $0.DueDate.isLessThanDate($1.DueDate)
-                })
-                self.tmpData.compromisos = activities
+                if activities.count != 0 {
+                    activities.sortInPlace({
+                        $0.DueDate.isLessThanDate($1.DueDate)
+                    })
+//                    self.tmpData.compromisos = activities
+                    
+                    data = activities
+                    
+                    completionHandler(succeded: true, error: nil, data: data)
+                }else{
+                    completionHandler(succeded: false, error: nil, data: nil)
+                }
                 
-                data["activities"] = activities
-
-                completionHandler(succeded: true, error: nil, data: data)
             }else{
                 completionHandler(succeded: false, error: nil, data: nil)
             }
