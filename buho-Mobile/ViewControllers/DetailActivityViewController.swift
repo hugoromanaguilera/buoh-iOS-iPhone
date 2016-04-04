@@ -45,10 +45,11 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
         addCommentButton.enabled = false
         
         refresher = UIRefreshControl()
-        refresher.addTarget(self, action: "refresh", forControlEvents: .ValueChanged)
+        refresher.addTarget(self, action: #selector(DetailActivityViewController.refresh), forControlEvents: .ValueChanged)
         
         tableView.addSubview(refresher)
-        
+
+        tabBarController?.tabBar.hidden = true
         
         activityIndicator.hidesWhenStopped = true
         loadActivity()
@@ -286,8 +287,8 @@ class DetailActivityViewController: UIViewController, UITableViewDataSource, UIT
     
     //MARK: - Selector for Notification Keyboard and delegates
     func addNotifications(){
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(DetailActivityViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(DetailActivityViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     func removeNotifications(){

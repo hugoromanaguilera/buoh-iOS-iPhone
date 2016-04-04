@@ -109,8 +109,9 @@ extension Array{
     }
     
     func getIndexForComment(comment: String) -> Int?{
-        var i: Int
-        for i = 0; i < self.count; i += 1 {
+//        var i: Int
+//        for i = 0; i < self.count; i += 1 {
+            for i in 0..<self.count {
             let object = self[i]
             if let commentApproval = object as? CommentsApproval {
                 if commentApproval.Comment == comment { return i }
@@ -120,8 +121,9 @@ extension Array{
     }
     
     func getIndexForComment(comment: CommentsApproval) -> Int?{
-        var i: Int
-        for i = 0; i < self.count; i += 1 {
+//        var i: Int
+//        for i = 0; i < self.count; i += 1 {
+        for i in 0..<self.count {
             let object = self[i]
             if let commentApproval = object as? CommentsApproval {
                 if commentApproval == comment { return i }

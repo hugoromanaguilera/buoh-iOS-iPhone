@@ -9,12 +9,15 @@
 import UIKit
 import Parse
 
-class ContractViewController: UITableViewController, UISearchResultsUpdating {
+class ContractViewController: UITableViewController, UISearchResultsUpdating, UISplitViewControllerDelegate {
     
     //MARK: - Variables
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    var activityController: ActivityController? = nil
+    
     private var refresher: UIRefreshControl!
+    private var collapseDetailViewController = true
     
     private var parseConnection : ParseConnection = ParseConnection.sharedInstance
     private var tmpData: TemporalData = TemporalData.sharedInstance
@@ -38,10 +41,24 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        splitViewController?.delegate = self
+        
+        if let split = splitViewController {
+            let controllers = split.viewControllers
+            if let tabVC = controllers.last as? TabBarViewController {// ActivityViewController {
+                if let navVC = tabVC.viewControllers?.first as? UINavigationController {
+                    if let activityVC = navVC.viewControllers.first as? ActivityController {
+                        activityController = activityVC
+                    }
+                }
+            }
+        }
+        
         activityIndicator.hidesWhenStopped = true
         
         refresher = UIRefreshControl()
-        refresher.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        refresher.addTarget(self, action: #selector(ContractViewController.refresh), forControlEvents: UIControlEvents.ValueChanged)
         
         tableView.addSubview(refresher)
         
@@ -72,27 +89,30 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
         clearsSelectionOnViewWillAppear = false
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    override func viewWillAppear(animated: Bool) {
+        self.clearsSelectionOnViewWillAppear = splitViewController!.collapsed
+        super.viewWillAppear(animated)
     }
     
     // MARK: - Table view data source
     //solo para separar las secciones de contratos:
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        if resultSearchController.active{
-            return 1
-        }else{
-            return self.arrayCompanies.count
-        }
+        return resultSearchController.active ? 1 : arrayCompanies.count
+//        if resultSearchController.active{
+//            return 1
+//        }else{
+//            return self.arrayCompanies.count
+//        }
         
     }
     //para saber cuantas secciones son:
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if resultSearchController.active{
-            return nil
-        }else{
-            return self.arrayCompanies[section]
-        }
+        return resultSearchController.active ? nil : arrayCompanies[section]
+//        if resultSearchController.active{
+//            return nil
+//        }else{
+//            return self.arrayCompanies[section]
+//        }
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -124,6 +144,7 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         contract = Contract()
+        collapseDetailViewController = false
         if resultSearchController.active {
             tmpData.contrato = arrayFilteredContracts[indexPath.row]
             performSegueWithIdentifier("showDetail", sender: arrayFilteredContracts[indexPath.row])
@@ -142,6 +163,13 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
         let headerView: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
         headerView.textLabel?.textColor = UIColor(red: 142/255, green: 68/255, blue: 173/255, alpha: 1)
     }
+    
+    // MARK: - UISplitViewControllerDelegate
+    
+    func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController: UIViewController, ontoPrimaryViewController primaryViewController: UIViewController) -> Bool {
+        return collapseDetailViewController
+    }
+    
 
     //MARK: - Funciones
     @IBAction func logoutButtonAction(sender: UIBarButtonItem) {
@@ -227,15 +255,17 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating {
         }
     }
     
-//    // MARK: - Segue
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "showDetail" {
-            
-            let navVC = segue.destinationViewController as! UINavigationController
-            let detailVC = navVC.viewControllers.first as! ActivityViewController
-            detailVC.detailContract = sender as? Contract
-            detailVC.detailContact = self.contact!
-        }
-    }
+////    // MARK: - Segue
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//        if let tabVC = segue.destinationViewController as? TabBarViewController {
+//            tabVC.detailContact = contact!
+////            tabVC.detailContract = sender as? Contract
+//            if let navVC = tabVC.viewControllers?.first as? UINavigationController {
+//                let detailVC = navVC.viewControllers.first as! ActivityController
+//                detailVC.detailContract = sender as? Contract
+//                detailVC.detailContact = self.contact!
+//            }
+//        }
+//    }
     
 }
