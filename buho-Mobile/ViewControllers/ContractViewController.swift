@@ -14,8 +14,6 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating, UI
     //MARK: - Variables
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    var activityController: ActivityController? = nil
-    
     private var refresher: UIRefreshControl!
     private var collapseDetailViewController = true
     
@@ -31,10 +29,12 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating, UI
     }
     
     var arrayFilteredContracts = [Contract]()
-    var resultSearchController : UISearchController!// = UISearchController()
+    var resultSearchController : UISearchController!
     
     var contract: Contract?
-    var contact : Contact?
+    var contact : Contact? {
+        return tmpData.contacto
+    }
     
     var indexContact : Int?
     var indexFilteredContact : Int?
@@ -43,17 +43,6 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating, UI
         super.viewDidLoad()
         
         splitViewController?.delegate = self
-        
-        if let split = splitViewController {
-            let controllers = split.viewControllers
-            if let tabVC = controllers.last as? TabBarViewController {// ActivityViewController {
-                if let navVC = tabVC.viewControllers?.first as? UINavigationController {
-                    if let activityVC = navVC.viewControllers.first as? ActivityController {
-                        activityController = activityVC
-                    }
-                }
-            }
-        }
         
         activityIndicator.hidesWhenStopped = true
         
@@ -72,18 +61,13 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating, UI
         resultSearchController.dimsBackgroundDuringPresentation = false
         resultSearchController.hidesNavigationBarDuringPresentation = false
         resultSearchController.searchBar.sizeToFit()
-//        resultSearchController.view.tintColor = UIColor(red: 0x8E, green: 0x44, blue: 0xAD, claro: false)
-        
         
         tableView.tableHeaderView = resultSearchController.searchBar
-        
         /*Fin de Config searchBar */
-        
-        //        tableView.reloadData()
+
         if let contact = contact {
             loadContracts(contact)
         }
-        
         
         // Uncomment the following line to preserve selection between presentations
         clearsSelectionOnViewWillAppear = false
@@ -98,21 +82,10 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating, UI
     //solo para separar las secciones de contratos:
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return resultSearchController.active ? 1 : arrayCompanies.count
-//        if resultSearchController.active{
-//            return 1
-//        }else{
-//            return self.arrayCompanies.count
-//        }
-        
     }
     //para saber cuantas secciones son:
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return resultSearchController.active ? nil : arrayCompanies[section]
-//        if resultSearchController.active{
-//            return nil
-//        }else{
-//            return self.arrayCompanies[section]
-//        }
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -165,11 +138,9 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating, UI
     }
     
     // MARK: - UISplitViewControllerDelegate
-    
     func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController: UIViewController, ontoPrimaryViewController primaryViewController: UIViewController) -> Bool {
         return collapseDetailViewController
     }
-    
 
     //MARK: - Funciones
     @IBAction func logoutButtonAction(sender: UIBarButtonItem) {
@@ -180,7 +151,6 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating, UI
         if !refresher.refreshing {
             activityIndicator.startAnimating()
         }
-        
         
         parseConnection.getContractsForContact(contact) { (succeded, error, data) -> () in
             guard error == nil else {
@@ -203,11 +173,7 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating, UI
             self.arrayCompanies.removeAll()
             self.arrayCompanies = [String](self.tmpData.dicContratos.keys)
             self.arrayCompanies.sortInPlace({ $0 < $1 })
-            
-//            self.arrayCompanies = data!["companies"] as! [String]
-//            self.arrayContracts = data!["contracts"] as! [Contract]
-//            self.dictionaryContracts = data!["dictionary"] as! NSDictionary as! [String : [Contract]]
-            
+
             dispatch_async(dispatch_get_main_queue()) {
                 self.activityIndicator.stopAnimating()
 
@@ -226,26 +192,38 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating, UI
         }
     }
     
-    func filterContentForSearchText(searchText: String) {
-        // Filter the array using the filter method
-        arrayFilteredContracts = self.arrayContracts.filter({ (contract : Contract) -> Bool in
-            let stringMatch = "\(contract.Name)".rangeOfString(searchText)
-            return (stringMatch != nil)
-            
-        })
-    }
+//    func filterContentForSearchText(searchText: String) {
+//        // Filter the array using the filter method
+//        arrayFilteredContracts = self.arrayContracts.filter({ (contract : Contract) -> Bool in
+//            let stringMatch = "\(contract.Name)".rangeOfString(searchText)
+//            return (stringMatch != nil)
+//            
+//        })
+//    }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         
         arrayFilteredContracts.removeAll(keepCapacity: false)
         
-        //  PROPIA FORMA DE FILTRAR
-        for cont in arrayContracts{
-            if "\(cont.Name)".lowercaseString.containsString(searchController.searchBar.text!.lowercaseString){
-                arrayFilteredContracts.append(cont)
-                arrayFilteredContracts.sortInPlace({$0.Name.lowercaseString > $1.Name.lowercaseString})
-            }
-        }
+        arrayFilteredContracts = arrayContracts.filter({ (contrato: Contract) -> Bool in
+            let nameContract = contrato.Name.lowercaseString
+            let stringMatch = nameContract.rangeOfString(searchController.searchBar.text!.lowercaseString)
+            return (stringMatch != nil)
+        })
+        
+//        let nav = self.parentViewController as! UINavigationController
+//        let add = nav.parentViewController as! AddContactViewController
+//        let save = add.navigationItem.rightBarButtonItem!
+//        save.enabled = false
+//        self.tableView.reloadData()
+//        
+//        //  PROPIA FORMA DE FILTRAR
+//        for cont in arrayContracts{
+//            if "\(cont.Name)".lowercaseString.containsString(searchController.searchBar.text!.lowercaseString){
+//                arrayFilteredContracts.append(cont)
+//                arrayFilteredContracts.sortInPlace({$0.Name.lowercaseString > $1.Name.lowercaseString})
+//            }
+//        }
         self.tableView.reloadData()
     }
     
@@ -255,16 +233,16 @@ class ContractViewController: UITableViewController, UISearchResultsUpdating, UI
         }
     }
     
-////    // MARK: - Segue
+//////    // MARK: - Segue
 //    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 //        if let tabVC = segue.destinationViewController as? TabBarViewController {
 //            tabVC.detailContact = contact!
-////            tabVC.detailContract = sender as? Contract
-//            if let navVC = tabVC.viewControllers?.first as? UINavigationController {
-//                let detailVC = navVC.viewControllers.first as! ActivityController
-//                detailVC.detailContract = sender as? Contract
-//                detailVC.detailContact = self.contact!
-//            }
+//            tabVC.detailContract = sender as? Contract
+////            if let navVC = tabVC.viewControllers?.first as? UINavigationController {
+////                let detailVC = navVC.viewControllers.first as! ActivityController
+////                detailVC.detailContract = sender as? Contract
+////                detailVC.detailContact = self.contact!
+////            }
 //        }
 //    }
     

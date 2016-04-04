@@ -21,9 +21,23 @@ class TabBarViewController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem()
+        navigationItem.leftItemsSupplementBackButton = true
 //        navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem()
 //        navigationItem.leftItemsSupplementBackButton = true
         // Do any additional setup after loading the view.
+    }
+    
+    func selectItemtab() {
+        
+        if let viewControllersTab = viewControllers {
+            for vc in viewControllersTab {
+                if let selectedVC = selectedViewController {
+                    vc.isEqual(selectedVC)
+                }
+            }
+        }
+
     }
 
     

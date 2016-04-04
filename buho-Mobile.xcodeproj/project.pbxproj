@@ -11,14 +11,13 @@
 		9301B0F61CA03C8400D3C7C4 /* CommentViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9301B0F51CA03C8400D3C7C4 /* CommentViewCell.swift */; };
 		930DC5001C96F96C00CD6722 /* TemporalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930DC4FF1C96F96C00CD6722 /* TemporalData.swift */; };
 		930DC5021C97362700CD6722 /* DueDateViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930DC5011C97362700CD6722 /* DueDateViewCell.swift */; };
-		931862731C9098890075780D /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931862721C9098890075780D /* ActivityViewController.swift */; };
 		931862761C90995E0075780D /* ActivityViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931862751C90995E0075780D /* ActivityViewCell.swift */; };
 		9369F52F1C8756F300EFC88D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9369F52E1C8756F300EFC88D /* AppDelegate.swift */; };
 		9369F5341C8756F300EFC88D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9369F5321C8756F300EFC88D /* Main.storyboard */; };
 		9369F5371C8756F300EFC88D /* buho_Mobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9369F5351C8756F300EFC88D /* buho_Mobile.xcdatamodeld */; };
 		9369F5391C8756F300EFC88D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9369F5381C8756F300EFC88D /* Assets.xcassets */; };
 		9369F53C1C8756F300EFC88D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9369F53A1C8756F300EFC88D /* LaunchScreen.storyboard */; };
-		936F61751CAD5A4900057C7E /* ActivityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936F61741CAD5A4900057C7E /* ActivityController.swift */; };
+		936F61751CAD5A4900057C7E /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936F61741CAD5A4900057C7E /* ActivityViewController.swift */; };
 		936F61771CAD5E9900057C7E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936F61761CAD5E9900057C7E /* TabBarViewController.swift */; };
 		939956081C90A8D3007AAB41 /* MeetingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939956071C90A8D3007AAB41 /* MeetingItem.swift */; };
 		9399560A1C90A91F007AAB41 /* Responsibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939956091C90A91F007AAB41 /* Responsibility.swift */; };
@@ -57,7 +56,6 @@
 		9301B0F51CA03C8400D3C7C4 /* CommentViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentViewCell.swift; path = ViewControllers/TableViewCell/CommentViewCell.swift; sourceTree = "<group>"; };
 		930DC4FF1C96F96C00CD6722 /* TemporalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TemporalData.swift; path = Frames/TemporalData.swift; sourceTree = "<group>"; };
 		930DC5011C97362700CD6722 /* DueDateViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DueDateViewCell.swift; path = ViewControllers/TableViewCell/DueDateViewCell.swift; sourceTree = "<group>"; };
-		931862721C9098890075780D /* ActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityViewController.swift; path = ViewControllers/ActivityViewController.swift; sourceTree = "<group>"; };
 		931862751C90995E0075780D /* ActivityViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityViewCell.swift; path = ViewControllers/TableViewCell/ActivityViewCell.swift; sourceTree = "<group>"; };
 		9369F52B1C8756F300EFC88D /* buho-Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "buho-Mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9369F52E1C8756F300EFC88D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -66,7 +64,7 @@
 		9369F5381C8756F300EFC88D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9369F53B1C8756F300EFC88D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9369F53D1C8756F300EFC88D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		936F61741CAD5A4900057C7E /* ActivityController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityController.swift; path = ViewControllers/ActivityController.swift; sourceTree = "<group>"; };
+		936F61741CAD5A4900057C7E /* ActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityViewController.swift; path = ViewControllers/ActivityViewController.swift; sourceTree = "<group>"; };
 		936F61761CAD5E9900057C7E /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TabBarViewController.swift; path = ViewControllers/TabBarViewController.swift; sourceTree = "<group>"; };
 		939956071C90A8D3007AAB41 /* MeetingItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeetingItem.swift; path = Models/MeetingItem.swift; sourceTree = "<group>"; };
 		939956091C90A91F007AAB41 /* Responsibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Responsibility.swift; path = Models/Responsibility.swift; sourceTree = "<group>"; };
@@ -183,9 +181,8 @@
 				931862741C9099280075780D /* TableViewCell */,
 				93C7FEAC1C8D222800926DB3 /* LoginViewController.swift */,
 				93DABB391C8DFBB100164B1F /* ContractViewController.swift */,
-				931862721C9098890075780D /* ActivityViewController.swift */,
+				936F61741CAD5A4900057C7E /* ActivityViewController.swift */,
 				939E704D1C9214B3004EB887 /* DetailActivityViewController.swift */,
-				936F61741CAD5A4900057C7E /* ActivityController.swift */,
 				936F61761CAD5E9900057C7E /* TabBarViewController.swift */,
 			);
 			name = ViewControllers;
@@ -385,7 +382,6 @@
 				9399560A1C90A91F007AAB41 /* Responsibility.swift in Sources */,
 				93DABB101C8DF6C200164B1F /* NetworkConnection.swift in Sources */,
 				93DABB321C8DF99E00164B1F /* Code.swift in Sources */,
-				931862731C9098890075780D /* ActivityViewController.swift in Sources */,
 				93DABB2E1C8DF94E00164B1F /* Contact.swift in Sources */,
 				931862761C90995E0075780D /* ActivityViewCell.swift in Sources */,
 				930DC5001C96F96C00CD6722 /* TemporalData.swift in Sources */,
@@ -400,7 +396,7 @@
 				93A3C7F61C985BFF000053A0 /* CommentsApproval.swift in Sources */,
 				93DABB3A1C8DFBB100164B1F /* ContractViewController.swift in Sources */,
 				9369F52F1C8756F300EFC88D /* AppDelegate.swift in Sources */,
-				936F61751CAD5A4900057C7E /* ActivityController.swift in Sources */,
+				936F61751CAD5A4900057C7E /* ActivityViewController.swift in Sources */,
 				930DC5021C97362700CD6722 /* DueDateViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

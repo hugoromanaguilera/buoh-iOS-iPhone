@@ -123,16 +123,16 @@ class LoginViewController: UIViewController{
 
         })
     }
-    
-    //MARK: - Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let destino = segue.destinationViewController as? UISplitViewController{
-            let nav = destino.viewControllers.first as? UINavigationController
-            if let master = nav?.viewControllers.first as? ContractViewController{
-                master.contact = contact
-            }
-        }
-    }
+//    
+//    //MARK: - Navigation
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//        if let destino = segue.destinationViewController as? UISplitViewController{
+//            let nav = destino.viewControllers.first as? UINavigationController
+//            if let master = nav?.viewControllers.first as? ContractViewController{
+//                master.contact = contact
+//            }
+//        }
+//    }
 
 }
 

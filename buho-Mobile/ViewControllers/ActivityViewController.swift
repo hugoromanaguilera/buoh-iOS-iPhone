@@ -2,33 +2,38 @@
 //  ActivityViewController.swift
 //  buho-Mobile
 //
-//  Created by Rodrigo Astorga on 3/9/16.
+//  Created by Rodrigo Astorga on 31-03-16.
 //  Copyright © 2016 Rodrigo Astorga. All rights reserved.
 //
 
 import UIKit
 
-//protocol DateMeetingVCDelegate {
-//    func saveDate(data: [String: NSDate])
-//}
+protocol DateMeetingVCDelegate {
+    func saveDate(data: [String: NSDate])
+}
 
 private let kCellActivity = "cellActivity"
 private let segueToDetail = "detailActivity"
 
-class ActivityViewController: UITableViewController {
-    
-    var refresher: UIRefreshControl!
-    
+class ActivityViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+
     //MARK: - Variables
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-//    @IBOutlet weak var filterButton: UIBarButtonItem!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var filterButton: UIBarButtonItem!
+
+    var refresher: UIRefreshControl!
     
     private var pConnection: ParseConnection = ParseConnection.sharedInstance
     private var tmpData: TemporalData = TemporalData.sharedInstance
     
-    internal var detailContact: Contact?
-    internal var detailContract: Contract?
-
+    internal var detailContact: Contact? {
+        return tmpData.contacto
+    }
+    internal var detailContract: Contract? {
+        return tmpData.contrato
+    }
+    
     var delegate : DateMeetingVCDelegate?
     
     private var sectionTitleArray : [String] = []
@@ -44,19 +49,9 @@ class ActivityViewController: UITableViewController {
     var arrayDateSelfActivities: [String] = []
     var isSelf: Bool = false
     
-    var logoutButton: UIBarButtonItem!
-    var filterButton: UIBarButtonItem!
-    
-    
     //MARK: - Lyfe cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        let logoutImage = UIImage(named: "logout-24")
-        let filterImage = UIImage(named: "filterOutline-24")
-        
-        logoutButton = UIBarButtonItem(image: logoutImage, style: .Plain, target: self, action: #selector(ActivityViewController.logoutAction(_:)))
-        filterButton = UIBarButtonItem(image: filterImage, style: .Plain, target: self, action: #selector(ActivityViewController.filterAction(_:)))
-        navigationItem.rightBarButtonItems = [filterButton, logoutButton]
         
         refresher = UIRefreshControl()
         refresher.addTarget(self, action: #selector(ActivityViewController.refresh), forControlEvents: .ValueChanged)
@@ -66,23 +61,23 @@ class ActivityViewController: UITableViewController {
         activityIndicator.hidesWhenStopped = true
         
         if let contract = detailContract {
-            navigationItem.title = contract.Name
+            parentViewController?.navigationItem.title = contract.Name
             loadActivities(contract)
         }
     }
     
     // MARK: - Table view data source
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if isSelf{
-//            return isNoData(arrayDateSelfActivities)
+            //            return isNoData(arrayDateSelfActivities)
             return arrayDateSelfActivities.count
         }else{
-//            return isNoData(arrayDateActivities)
+            //            return isNoData(arrayDateActivities)
             return arrayDateActivities.count
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         
         let cell = self.tableView.dequeueReusableCellWithIdentifier(kCellActivity) as! ActivityViewCell
         
@@ -114,7 +109,7 @@ class ActivityViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if isSelf {
             let sectionTitle = arrayDateSelfActivities[indexPath.section]
             let activities = dictionarySelfActivities[ sectionTitle ]!
@@ -130,7 +125,7 @@ class ActivityViewController: UITableViewController {
     }
     
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if arrayExpandSections[section].boolValue {
             if isSelf {
                 let title = arrayDateSelfActivities[section]
@@ -144,10 +139,10 @@ class ActivityViewController: UITableViewController {
         }else{
             return 0
         }
-
+        
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if isSelf {
             let title = arrayDateSelfActivities[section]
             if let day = getDayOfWeek(title) {
@@ -165,7 +160,7 @@ class ActivityViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let headerView = view as! UITableViewHeaderFooterView
         headerView.textLabel?.textColor = UIColor(red: 142/255, green: 68/255, blue: 142/255, alpha: 1)
     }
@@ -221,29 +216,17 @@ class ActivityViewController: UITableViewController {
             
             self.tmpData.compromisos = data!
             self.loadSelfActivities()
-//            if !self.tmpData.compromisos.isEmpty {
-//                self.arrayMeetingItems = self.tmpData.compromisos
-//                self.loadSelfActivities()
-//            }else{
-//                self.tmpData.compromisos = data!
-//                self.arrayMeetingItems = self.tmpData.compromisos
-//                self.loadSelfActivities()
-//            }
         })
     }
-
+    
     func loadSelfActivities(){
         
         var dicActivities: [String: [MeetingItem] ] = [:]
         var dicSelfActivities: [String: [MeetingItem] ] = [:]
-        
-//        var i: Int
-//        var j: Int
+
         for i in 0..<arrayMeetingItems.count {
-//        for i = 0; i < arrayMeetingItems.count; i += 1 {
             let meetingItem = arrayMeetingItems[i]
             for j in 0..<meetingItem.Responsibilities.count {
-//            for j = 0; j < meetingItem.Responsibilities.count; j += 1{
                 let responsibility = meetingItem.Responsibilities[j]
                 if let contact = detailContact {
                     if responsibility.ContactId == contact{
@@ -283,13 +266,13 @@ class ActivityViewController: UITableViewController {
         arrayDateSelfActivities.sortInPlace {
             $0.stringToDate()!.isLessThanDate($1.stringToDate()!)
         }
-
+        
         
         dictionaryActivities = dicActivities
         dictionarySelfActivities = dicSelfActivities
         
         arrayExpandSections = [Bool](count: dictionaryActivities.count, repeatedValue: true)
-
+        
         activityIndicator.stopAnimating()
         
         if self.refresher.refreshing {
@@ -303,5 +286,6 @@ class ActivityViewController: UITableViewController {
             loadActivities(contract)
         }
     }
-    
+
 }
+
